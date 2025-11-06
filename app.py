@@ -52,7 +52,7 @@ st.markdown("""
     
     /* ボタンを正方形に */
     .stButton button {
-        width: auto !important;
+        width: 50px !important;
         aspect-ratio: 1 / 1 !important;
         height: auto !important;
         min-height: 0 !important;
