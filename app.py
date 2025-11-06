@@ -44,24 +44,39 @@ st.markdown("""
         max-width: 100%;
     }
     
-    /* カラムコンテナの設定 */
+    /* カラムコンテナの設定 - 5つ並ぶように */
     [data-testid="column"] {
-        width: calc(20% - 4px) !important;
-        flex: 1 1 calc(20% - 4px) !important;
+        width: 20% !important;
+        flex: 0 0 20% !important;
+        max-width: 20% !important;
         min-width: 0 !important;
-        padding: 2px !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
         width: 100% !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+    }
+    
+    /* ボタンのコンテナ */
+    .element-container:has(.stButton) {
+        width: 100% !important;
+        padding: 2px !important;
+        margin: 0 !important;
     }
     
     /* Streamlitのボタンを正方形にするスタイル */
+    .stButton {
+        width: 100% !important;
+    }
+    
     .stButton > button {
-        width: 20% !important;
-        aspect-ratio: 1 !important;
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
         min-height: 0 !important;
@@ -77,6 +92,7 @@ st.markdown("""
         word-wrap: break-word !important;
         line-height: 1.4 !important;
         box-sizing: border-box !important;
+        margin: 0 !important;
     }
     
     /* ボタン内のテキストスタイル */
@@ -114,14 +130,14 @@ st.markdown("""
     
     /* Streamlitのデフォルト余白を削除 */
     .element-container {
-        margin-bottom: 0.3rem !important;
+        margin-bottom: 0 !important;
     }
     
     .row-widget {
         margin-bottom: 0 !important;
     }
     
-    /* スマホ画面での調整 */
+    /* スマホ画面での調整 (768px以下) */
     @media (max-width: 768px) {
         .main {
             padding: 0.3rem;
@@ -137,7 +153,7 @@ st.markdown("""
             margin-bottom: 0.5rem;
         }
         
-        [data-testid="column"] {
+        .element-container:has(.stButton) {
             padding: 1.5px !important;
         }
         
@@ -149,7 +165,7 @@ st.markdown("""
         }
     }
     
-    /* 非常に小さい画面（モバイル）での調整 */
+    /* 非常に小さい画面（480px以下） */
     @media (max-width: 480px) {
         .main {
             padding: 0.2rem;
@@ -158,6 +174,7 @@ st.markdown("""
         .block-container {
             padding-left: 0.2rem;
             padding-right: 0.2rem;
+            padding-top: 0.5rem;
         }
         
         h1 {
@@ -165,7 +182,7 @@ st.markdown("""
             margin-bottom: 0.3rem;
         }
         
-        [data-testid="column"] {
+        .element-container:has(.stButton) {
             padding: 1px !important;
         }
         
@@ -174,10 +191,32 @@ st.markdown("""
             padding: 0.2rem 0.05rem !important;
             line-height: 1.3 !important;
             border-radius: 4px !important;
+            border-width: 1px !important;
+        }
+    }
+    
+    /* 超小型画面（360px以下） */
+    @media (max-width: 360px) {
+        .main {
+            padding: 0.1rem;
         }
         
-        .element-container {
-            margin-bottom: 0.2rem !important;
+        .block-container {
+            padding: 0.1rem;
+        }
+        
+        h1 {
+            font-size: 1.2rem;
+        }
+        
+        .element-container:has(.stButton) {
+            padding: 0.5px !important;
+        }
+        
+        .stButton > button {
+            font-size: clamp(0.5rem, 3.2vw, 0.7rem) !important;
+            padding: 0.15rem 0.05rem !important;
+            border-radius: 3px !important;
         }
     }
 </style>
