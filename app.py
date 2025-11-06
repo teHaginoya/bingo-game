@@ -5,11 +5,11 @@ import time
 st.set_page_config(
     page_title="ビンゴゲーム", 
     page_icon="🎯", 
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# カスタムCSS - スマホ対応のビンゴカード
+# カスタムCSS - スマホ全画面対応
 st.markdown("""
     <style>
     /* 水色のグラデーション背景 */
@@ -19,19 +19,16 @@ st.markdown("""
     
     /* メインコンテンツエリア */
     .main .block-container {
-        padding-top: 1rem;
-        padding-bottom: 2rem;
+        padding: 0.5rem 0.5rem;
         max-width: 100%;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
     }
     
     /* タイトルスタイル */
     h1 {
         color: white;
         text-align: center;
-        font-size: 2rem !important;
-        margin-bottom: 0.5rem !important;
+        font-size: 1.5rem !important;
+        margin: 0.3rem 0 !important;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
@@ -40,7 +37,7 @@ st.markdown("""
         width: 20% !important;
         flex: 1 1 20% !important;
         min-width: 0 !important;
-        padding: 2px !important;
+        padding: 1px !important;
     }
     
     /* 行を横並びに固定 */
@@ -49,50 +46,23 @@ st.markdown("""
         flex-wrap: nowrap !important;
     }
     
-    /* ボタンのスタイル */
+    /* ボタンを正方形に */
     .stButton button {
         width: 100%;
-        height: 70px;
-        font-size: 11px;
+        aspect-ratio: 1 / 1;
+        height: auto !important;
+        font-size: 0.65rem;
         font-weight: bold;
         border-radius: 8px;
         white-space: normal;
         word-wrap: break-word;
-        line-height: 1.2;
-        transition: all 0.3s ease;
+        line-height: 1.1;
+        transition: all 0.2s ease;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        padding: 4px;
-    }
-    
-    /* スマホ用の調整 */
-    @media (max-width: 768px) {
-        .stButton button {
-            height: 65px;
-            font-size: 10px;
-            border-radius: 6px;
-        }
-        
-        h1 {
-            font-size: 1.5rem !important;
-        }
-        
-        div[data-testid="column"] {
-            padding: 1px !important;
-        }
-    }
-    
-    /* さらに小さい画面用 */
-    @media (max-width: 480px) {
-        .stButton button {
-            height: 60px;
-            font-size: 9px;
-        }
-    }
-    
-    /* ボタンホバー効果 */
-    .stButton button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     /* プライマリボタン（マーク済み） */
@@ -118,9 +88,10 @@ st.markdown("""
     
     /* コントロールボタン */
     .main > div:first-child .stButton button {
-        height: 45px;
-        font-size: 14px;
-        border-radius: 22px;
+        aspect-ratio: auto !important;
+        height: 40px !important;
+        font-size: 0.9rem;
+        border-radius: 20px;
         background: white;
         color: #0288D1;
         border: 2px solid #4FC3F7;
@@ -128,28 +99,28 @@ st.markdown("""
     
     /* メトリクスカード */
     [data-testid="stMetricValue"] {
-        font-size: 24px;
+        font-size: 1.2rem;
         color: white;
         font-weight: bold;
     }
     
     [data-testid="stMetricLabel"] {
         color: white !important;
-        font-size: 14px;
+        font-size: 0.75rem;
     }
     
     div[data-testid="metric-container"] {
         background: rgba(255, 255, 255, 0.25);
-        padding: 10px;
-        border-radius: 12px;
+        padding: 8px;
+        border-radius: 10px;
         backdrop-filter: blur(10px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
     /* 区切り線 */
     hr {
-        margin: 1rem 0;
+        margin: 0.5rem 0;
         border: none;
         height: 2px;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
@@ -159,14 +130,14 @@ st.markdown("""
     .stSuccess {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: white;
-        padding: 15px;
-        border-radius: 12px;
-        font-size: 18px;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 1rem;
         font-weight: bold;
         text-align: center;
-        border: 3px solid #FF6B6B;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        margin-bottom: 1rem;
+        border: 2px solid #FF6B6B;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        margin: 0.5rem 0;
     }
     
     /* ダイアログのスタイル */
@@ -193,22 +164,66 @@ st.markdown("""
     .stError {
         background: rgba(244, 67, 54, 0.9);
         color: white;
-        padding: 15px;
+        padding: 10px;
         border-radius: 10px;
+        font-size: 0.9rem;
     }
     
     /* トップのビンゴ数表示 */
     .bingo-count-display {
         text-align: center;
         color: white;
-        font-size: 18px;
-        margin-top: 8px;
+        font-size: 1rem;
+        margin-top: 5px;
         font-weight: bold;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         background: rgba(255, 215, 0, 0.3);
-        padding: 6px;
+        padding: 5px;
         border-radius: 15px;
         border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+    
+    /* スマホ最適化 */
+    @media (max-width: 768px) {
+        .stButton button {
+            font-size: 0.6rem;
+            border-radius: 6px;
+            border-width: 1.5px;
+        }
+        
+        h1 {
+            font-size: 1.3rem !important;
+        }
+        
+        .main > div:first-child .stButton button {
+            height: 36px !important;
+            font-size: 0.85rem;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 1rem;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.7rem;
+        }
+    }
+    
+    /* さらに小さい画面用 */
+    @media (max-width: 480px) {
+        .stButton button {
+            font-size: 0.55rem;
+            border-radius: 5px;
+        }
+        
+        h1 {
+            font-size: 1.1rem !important;
+        }
+        
+        .main > div:first-child .stButton button {
+            height: 32px !important;
+            font-size: 0.8rem;
+        }
     }
     </style>
     """, unsafe_allow_html=True)
@@ -321,7 +336,7 @@ if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
 st.title("🎯 ビンゴカード")
 
 # コントロールボタン
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("🆕 新規", use_container_width=True):
         st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
