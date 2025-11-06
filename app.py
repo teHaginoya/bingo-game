@@ -46,20 +46,20 @@ st.markdown("""
     .stButton > button {
         width: 100% !important;
         aspect-ratio: 1 !important;
-        padding: 0.3rem !important;
+        padding: 0.4rem !important;
         height: auto !important;
         min-height: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: clamp(0.65rem, 2.3vw, 0.85rem) !important;
+        font-size: clamp(0.6rem, 2.2vw, 0.8rem) !important;
         font-weight: bold !important;
         border-radius: 8px !important;
         border: 2px solid #333 !important;
-        white-space: normal !important;
+        white-space: pre-line !important;
         word-wrap: break-word !important;
-        line-height: 1.1 !important;
+        line-height: 1.3 !important;
     }
     
     /* ボタン内のテキストスタイル */
@@ -68,6 +68,7 @@ st.markdown("""
         flex-direction: column !important;
         align-items: center !important;
         gap: 0.2rem !important;
+        text-align: center !important;
     }
     
     /* チェック済みボタン（primary） */
@@ -223,12 +224,12 @@ for row_idx in range(5):
             else:
                 # 項目名を表示
                 label = str(cell_value)
-                # 名前が入力されている場合は下に表示
-                if cell_name:
-                    label = f"{label}\n({cell_name})"
                 # チェックマークを追加
                 if is_checked:
                     label = f"✓ {label}"
+                # 名前が入力されている場合は改行して表示
+                if cell_name:
+                    label = f"{label}\n\n{cell_name}"
                 button_type = "primary" if is_checked else "secondary"
             
             # ボタンを作成
@@ -261,6 +262,7 @@ bingo_count = check_bingo(st.session_state.checked)
 # ビンゴ状態の表示
 st.markdown("---")
 if bingo_count > 0:
+    st.balloons()  # 風船を表示
     st.success(f"🎉 {bingo_count}つのビンゴが揃いました！")
 else:
     st.info("💡 アイテムをタップしてマークしましょう！")
