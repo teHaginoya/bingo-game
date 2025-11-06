@@ -110,7 +110,7 @@ st.markdown("""
        ======================================== */
     button[aria-label*="submit"],
     button[aria-label*="cancel"] {
-        width: 100% !important;
+        width: 300px !important;
         aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
         padding: 0.75rem 1.5rem !important;
         height: 100px !important;
