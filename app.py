@@ -52,7 +52,8 @@ div[data-testid="column"] {
 .bingo-card .stButton button {
     width: 100%;
     aspect-ratio: 1 / 1; /* 正方形維持 */
-    font-size: 0.6rem;
+    padding: 0;
+    font-size: 14px;
     border-radius: 6px;
     border: 2px solid #B0E0E6;
     background: white;
@@ -60,7 +61,7 @@ div[data-testid="column"] {
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease;
-    white-space: normal;
+    white-space: pre-wrap;
     word-wrap: break-word;
     line-height: 1.1;
     display: flex;
