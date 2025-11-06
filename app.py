@@ -1,438 +1,426 @@
 import streamlit as st
 import random
-import time
 
+# ページ設定
 st.set_page_config(
-    page_title="ビンゴゲーム", 
-    page_icon="🎯", 
+    page_title="ビンゴカード",
+    page_icon="🎯",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# カスタムCSS - 水色背景とフリップアニメーション
-st.markdown("""
-    <style>
-    /* 水色のグラデーション背景 */
-    .stApp {
-        background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
-    }
-    
-    /* メインコンテンツエリア */
-    .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        max-width: 800px;
-    }
-    
-    /* タイトルスタイル */
-    h1 {
-        color: white;
-        text-align: center;
-        font-size: 2.5rem !important;
-        margin-bottom: 1rem !important;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    /* ボタンのスタイル */
-    .stButton button {
-        width: 100%;
-        height: 90px;
-        font-size: 15px;
-        font-weight: bold;
-        border-radius: 15px;
-        white-space: normal;
-        word-wrap: break-word;
-        line-height: 1.4;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transform-style: preserve-3d;
-        perspective: 1000px;
-    }
-    
-    /* ボタンホバー効果 */
-    .stButton button:hover {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-    
-    /* フリップアニメーション */
-    @keyframes flip {
-        0% {
-            transform: rotateY(0deg);
-        }
-        50% {
-            transform: rotateY(90deg);
-        }
-        100% {
-            transform: rotateY(0deg);
-        }
-    }
-    
-    .flip-animation {
-        animation: flip 0.6s ease-in-out;
-    }
-    
-    /* プライマリボタン（マーク済み） */
-    .stButton button[kind="primary"] {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: #333;
-        border: 3px solid #FF6B6B;
-        font-weight: bold;
-    }
-    
-    /* セカンダリボタン（未マーク） */
-    .stButton button[kind="secondary"] {
-        background: white;
-        color: #333;
-        border: 2px solid #B0E0E6;
-    }
-    
-    /* コントロールボタン */
-    div[data-testid="column"]:has(.stButton) .stButton button {
-        height: 50px;
-        font-size: 16px;
-        border-radius: 25px;
-        background: white;
-        color: #0288D1;
-        border: 2px solid #4FC3F7;
-    }
-    
-    div[data-testid="column"]:has(.stButton) .stButton button:hover {
-        background: #E1F5FE;
-        transform: translateY(-2px);
-    }
-    
-    /* メトリクスカード */
-    [data-testid="stMetricValue"] {
-        font-size: 28px;
-        color: white;
-        font-weight: bold;
-    }
-    
-    [data-testid="stMetricLabel"] {
-        color: white !important;
-        font-size: 16px;
-    }
-    
-    div[data-testid="metric-container"] {
-        background: rgba(255, 255, 255, 0.25);
-        padding: 15px;
-        border-radius: 15px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    /* 区切り線 */
-    hr {
-        margin: 1.5rem 0;
-        border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-    }
-    
-    /* 成功メッセージ */
-    .stSuccess {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 15px;
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-        border: 3px solid #FF6B6B;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
-    
-    /* ダイアログのスタイル */
-    [data-testid="stModal"] {
-        background: rgba(255, 255, 255, 0.98);
-        border-radius: 20px;
-        border: 3px solid #4FC3F7;
-    }
-    
-    /* テキスト入力 */
-    .stTextInput input {
-        border-radius: 10px;
-        border: 2px solid #4FC3F7;
-        padding: 12px;
-        font-size: 16px;
-    }
-    
-    .stTextInput input:focus {
-        border-color: #0288D1;
-        box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
-    }
-    
-    /* エラーメッセージ */
-    .stError {
-        background: rgba(244, 67, 54, 0.9);
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-    }
-    
-    /* トップのビンゴ数表示 */
-    .bingo-count-display {
-        text-align: center;
-        color: white;
-        font-size: 20px;
-        margin-top: 8px;
-        font-weight: bold;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        background: rgba(255, 215, 0, 0.3);
-        padding: 8px;
-        border-radius: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# ===== ここに項目リストを追加してください =====
-ITEM_LIST = [
-    "朝食を食べた",
-    "運動した",
-    "本を読んだ",
-    "早起きした",
-    "水を2L飲んだ",
-    "ストレッチした",
-    "瞑想した",
-    "日記を書いた",
-    "友達と話した",
-    "新しいことを学んだ",
-    "掃除をした",
-    "料理をした",
-    "散歩した",
-    "音楽を聴いた",
-    "映画を見た",
-    "買い物した",
-    "洗濯した",
-    "勉強した",
-    "仕事した",
-    "ゲームした",
-    "写真を撮った",
-    "ブログを書いた",
-    "メールを返信した",
-    "会議に参加した",
-    "プレゼンした",
+# ビンゴカードに表示するアイテムのリスト
+# ここを自由に変更してください
+BINGO_ITEMS = [
+    "リンゴ", "バナナ", "イチゴ", "ブドウ", "メロン",
+    "スイカ", "桃", "梨", "柿", "みかん",
+    "キウイ", "マンゴー", "パイナップル", "レモン", "オレンジ",
+    "さくらんぼ", "プラム", "アボカド", "パパイヤ", "グァバ",
+    "ライチ", "ドラゴンフルーツ", "パッションフルーツ", "ザクロ", "いちじく"
 ]
-# ==========================================
 
-# セッションステートの初期化
+# カスタムCSS - スマホ最適化
+st.markdown("""
+<style>
+    /* メインコンテナの調整 */
+    .main {
+        padding: 0.5rem;
+        max-width: 100%;
+    }
+    
+    /* タイトルのスタイル */
+    h1 {
+        text-align: center;
+        font-size: clamp(1.5rem, 5vw, 1.8rem);
+        margin-bottom: 1rem;
+    }
+    
+    /* ビンゴカード全体のコンテナ */
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        max-width: 100%;
+    }
+    
+    /* カラムコンテナの設定 - 5つ並ぶように */
+    [data-testid="column"] {
+        width: 20% !important;
+        flex: 0 0 20% !important;
+        max-width: 20% !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* 行の設定 */
+    .row-widget.stHorizontal {
+        gap: 0 !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        margin: 0 !important;
+    }
+    
+    /* ボタンのコンテナ */
+    .element-container:has(.stButton) {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* ========================================
+       ビンゴマス用のスタイル（正方形）
+       key="cell_*_*" のボタン
+       ======================================== */
+    .stButton:has(button[data-testid*="baseButton"]) {
+        width: 100% !important;
+        padding: 2px !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* cell_で始まるkeyを持つボタン = ビンゴマス（正方形） */
+    button[aria-label*="cell_"] {
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;  /* 正方形 */
+        padding: 0.5rem 0.2rem !important;
+        height: auto !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: clamp(0.7rem, 2.5vw, 1rem) !important;
+        font-weight: normal !important;
+        border-radius: 8px !important;
+        border: 2px solid #333 !important;
+        white-space: pre-line !important;
+        word-wrap: break-word !important;
+        line-height: 1.4 !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+    }
+    
+    /* ========================================
+       通常のボタン用のスタイル（横長の長方形）
+       submit, cancel などのボタン
+       ======================================== */
+    button[aria-label*="submit"],
+    button[aria-label*="cancel"] {
+        width: 100% !important;
+        aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
+        padding: 0.75rem 1.5rem !important;
+        height: auto !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1rem !important;
+        font-weight: normal !important;
+        border-radius: 8px !important;
+        border: 2px solid #333 !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+    }
+    
+    /* ボタン内のテキストスタイル */
+    .stButton > button > div {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.2rem !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+    
+    /* チェック済みボタン（primary） */
+    .stButton > button[kind="primary"] {
+        background-color: #ff6b6b !important;
+        color: white !important;
+        border-color: #ff6b6b !important;
+    }
+    
+    /* 未チェックボタン（secondary） */
+    .stButton > button[kind="secondary"] {
+        background-color: #ffffff !important;
+        color: #333 !important;
+        border-color: #333 !important;
+    }
+    
+    /* FREEマス */
+    .stButton > button:disabled {
+        background-color: #4ecdc4 !important;
+        color: white !important;
+        border-color: #4ecdc4 !important;
+        opacity: 1 !important;
+    }
+    
+    /* Streamlitのデフォルト余白を削除 */
+    .element-container {
+        margin-bottom: 0 !important;
+    }
+    
+    .row-widget {
+        margin-bottom: 0 !important;
+    }
+    
+    /* スマホ画面での調整 (768px以下) */
+    @media (max-width: 768px) {
+        .main {
+            padding: 0.3rem;
+        }
+        
+        .block-container {
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stButton:has(button[aria-label*="cell_"]) {
+            padding: 1.5px !important;
+        }
+        
+        button[aria-label*="cell_"] {
+            font-size: clamp(0.6rem, 2.8vw, 0.85rem) !important;
+            padding: 0.3rem 0.1rem !important;
+            border-width: 1.5px !important;
+            border-radius: 6px !important;
+        }
+    }
+    
+    /* 非常に小さい画面（480px以下） */
+    @media (max-width: 480px) {
+        .main {
+            padding: 0.2rem;
+        }
+        
+        .block-container {
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+            padding-top: 0.5rem;
+        }
+        
+        h1 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stButton:has(button[aria-label*="cell_"]) {
+            padding: 1px !important;
+        }
+        
+        button[aria-label*="cell_"] {
+            font-size: clamp(0.55rem, 3vw, 0.75rem) !important;
+            padding: 0.2rem 0.05rem !important;
+            line-height: 1.3 !important;
+            border-radius: 4px !important;
+            border-width: 1px !important;
+        }
+    }
+    
+    /* 超小型画面（360px以下） */
+    @media (max-width: 360px) {
+        .main {
+            padding: 0.1rem;
+        }
+        
+        .block-container {
+            padding: 0.1rem;
+        }
+        
+        h1 {
+            font-size: 1.2rem;
+        }
+        
+        .stButton:has(button[aria-label*="cell_"]) {
+            padding: 0.5px !important;
+        }
+        
+        button[aria-label*="cell_"] {
+            font-size: clamp(0.5rem, 3.2vw, 0.7rem) !important;
+            padding: 0.15rem 0.05rem !important;
+            border-radius: 3px !important;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# セッション状態の初期化
 if 'bingo_card' not in st.session_state:
     st.session_state.bingo_card = None
-if 'marked_cells' not in st.session_state:
-    st.session_state.marked_cells = {}
-if 'selected_cell' not in st.session_state:
-    st.session_state.selected_cell = None
-if 'flip_cell' not in st.session_state:
-    st.session_state.flip_cell = None
-if 'last_bingo_count' not in st.session_state:
-    st.session_state.last_bingo_count = 0
+    st.session_state.checked = None
+    st.session_state.names = None  # 各マスに入力された名前を保存
+    st.session_state.current_cell = None  # 現在編集中のセル
 
-def generate_bingo_card(items):
-    """カスタム項目でビンゴカードを生成"""
-    if len(items) < 24:
-        return None
+@st.dialog("✏️ 名前を入力してください")
+def show_name_input_dialog(row, col, cell_value):
+    """名前入力用のモーダルダイアログ"""
+    st.write(f"項目: **{cell_value}**")
     
-    selected = random.sample(items, 24)
+    name_input = st.text_input(
+        "名前",
+        key=f"name_input_{row}_{col}",
+        placeholder="名前を入力...",
+        label_visibility="collapsed"
+    )
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("✓ 決定", key=f"submit_{row}_{col}", use_container_width=True):
+            st.session_state.checked[row][col] = True
+            st.session_state.names[row][col] = name_input
+            st.session_state.current_cell = None
+            st.rerun()
+    
+    with col2:
+        if st.button("✕ キャンセル", key=f"cancel_{row}_{col}", use_container_width=True):
+            st.session_state.current_cell = None
+            st.rerun()
+
+
+def generate_bingo_card():
+    """リストからランダムに選んでビンゴカードを生成"""
+    # 25マス分必要なので、リストをシャッフルして使用
+    if len(BINGO_ITEMS) < 24:  # 24個（中央はFREE）
+        # アイテムが足りない場合は重複を許可
+        selected_items = random.choices(BINGO_ITEMS, k=24)
+    else:
+        # アイテムが十分ある場合は重複なしで選択
+        selected_items = random.sample(BINGO_ITEMS, 24)
     
     card = []
-    index = 0
+    item_index = 0
+    
     for row in range(5):
-        row_items = []
+        row_data = []
         for col in range(5):
             if row == 2 and col == 2:
-                row_items.append('FREE')
+                # 中央はフリースペース
+                row_data.append("FREE")
             else:
-                row_items.append(selected[index])
-                index += 1
-        card.append(row_items)
-    
-    st.session_state.marked_cells[(2, 2)] = "FREE"
+                row_data.append(selected_items[item_index])
+                item_index += 1
+        card.append(row_data)
     
     return card
 
-def check_bingo(marked):
-    """ビンゴ判定"""
-    bingo_count = 0
+def check_bingo(checked):
+    """ビンゴが揃っているかチェック"""
+    bingo_lines = 0
     
+    # 横のチェック
     for row in range(5):
-        if all((row, col) in marked for col in range(5)):
-            bingo_count += 1
+        if all(checked[row]):
+            bingo_lines += 1
     
+    # 縦のチェック
     for col in range(5):
-        if all((row, col) in marked for row in range(5)):
-            bingo_count += 1
+        if all(checked[row][col] for row in range(5)):
+            bingo_lines += 1
     
-    if all((i, i) in marked for i in range(5)):
-        bingo_count += 1
+    # 斜めのチェック（左上から右下）
+    if all(checked[i][i] for i in range(5)):
+        bingo_lines += 1
     
-    if all((i, 4-i) in marked for i in range(5)):
-        bingo_count += 1
+    # 斜めのチェック（右上から左下）
+    if all(checked[i][4-i] for i in range(5)):
+        bingo_lines += 1
     
-    return bingo_count
-
-def show_snow_effect(bingo_count):
-    """ビンゴ数に応じた雪のエフェクトを表示"""
-    if bingo_count == 1:
-        # 1ライン: 雪 1回
-        st.snow()
-    elif bingo_count == 2:
-        # 2ライン: 雪 2回
-        st.snow()
-        time.sleep(0.3)
-        st.snow()
-    elif bingo_count >= 3:
-        # 3ライン以上: ビンゴ数に応じて繰り返し（最大5回）
-        for i in range(min(bingo_count, 5)):
-            st.snow()
-            if i < min(bingo_count, 5) - 1:
-                time.sleep(0.3)
-
-# 初回アクセス時に自動でカード生成
-if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
-    st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
-    st.session_state.marked_cells = {(2, 2): "FREE"}
+    return bingo_lines
 
 # タイトル
 st.title("🎯 ビンゴカード")
 
-# コントロールボタン
-col1, col2, col3 = st.columns([1, 1, 1])
-with col1:
-    if st.button("🆕 新しいカード", use_container_width=True):
-        st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
-        st.session_state.marked_cells = {(2, 2): "FREE"}
-        st.session_state.selected_cell = None
-        st.session_state.flip_cell = None
-        st.session_state.last_bingo_count = 0
-        st.rerun()
-
-with col2:
-    if st.button("🔄 リセット", use_container_width=True):
-        st.session_state.marked_cells = {(2, 2): "FREE"}
-        st.session_state.selected_cell = None
-        st.session_state.flip_cell = None
-        st.session_state.last_bingo_count = 0
-        st.rerun()
-
-with col3:
-    # 統計をここに表示
-    if st.session_state.bingo_card:
-        bingo_count = check_bingo(st.session_state.marked_cells)
-        st.markdown(f"<div class='bingo-count-display'>🏆 {bingo_count}ライン</div>", unsafe_allow_html=True)
-
-st.divider()
-
-# ダイアログ表示
-@st.dialog("✨ 名前を入力")
-def name_input_dialog(row, col):
-    item_name = st.session_state.bingo_card[row][col]
-    st.markdown(f"### 📝 {item_name}")
-    
-    current_name = st.session_state.marked_cells.get((row, col), "")
-    
-    name = st.text_input("👤 お名前", value=current_name, key=f"name_input_{row}_{col}", placeholder="例: 山田太郎")
-    
-    st.write("")  # スペース
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button("✅ 登録", use_container_width=True, key=f"register_{row}_{col}", type="primary"):
-            if name.strip():
-                st.session_state.marked_cells[(row, col)] = name.strip()
-                st.session_state.selected_cell = None
-                st.session_state.flip_cell = (row, col)
-                st.rerun()
-            else:
-                st.warning("名前を入力してください")
-    
-    with col2:
-        if st.button("🗑️ 削除", use_container_width=True, key=f"delete_{row}_{col}"):
-            if (row, col) in st.session_state.marked_cells:
-                del st.session_state.marked_cells[(row, col)]
-            st.session_state.selected_cell = None
-            st.session_state.flip_cell = (row, col)
-            st.rerun()
-    
-    with col3:
-        if st.button("❌ 閉じる", use_container_width=True, key=f"cancel_{row}_{col}"):
-            st.session_state.selected_cell = None
-            st.rerun()
-
-if st.session_state.selected_cell:
-    row, col = st.session_state.selected_cell
-    name_input_dialog(row, col)
-
-# ビンゴカード表示
+# アプリを開いた時に毎回新しいカードを生成
 if st.session_state.bingo_card is None:
-    st.error("❌ 項目が不足しています（最低24個必要）")
-else:
-    # ビンゴ判定
-    bingo_count = check_bingo(st.session_state.marked_cells)
-    
-    # ビンゴ数が増えた場合のみ雪エフェクト表示
-    if bingo_count > st.session_state.last_bingo_count:
-        show_snow_effect(bingo_count)
-        st.session_state.last_bingo_count = bingo_count
-    
-    # ビンゴメッセージ
-    if bingo_count == 1:
-        st.success(f"❄️ 素晴らしい！{bingo_count}ライン達成！")
-    elif bingo_count == 2:
-        st.success(f"❄️❄️ すごい！{bingo_count}ライン達成！ ❄️❄️")
-    elif bingo_count >= 3:
-        st.success(f"❄️❄️❄️ 完璧です！{bingo_count}ライン達成！ ❄️❄️❄️")
-    
-    # ビンゴカード表示
-    for row in range(5):
-        cols = st.columns(5)
-        for col in range(5):
-            value = st.session_state.bingo_card[row][col]
-            is_marked = (row, col) in st.session_state.marked_cells
+    st.session_state.bingo_card = generate_bingo_card()
+    st.session_state.checked = [[False for _ in range(5)] for _ in range(5)]
+    st.session_state.checked[2][2] = True  # フリースペースは最初からチェック済み
+    st.session_state.names = [["" for _ in range(5)] for _ in range(5)]  # 名前を初期化
+
+# ビンゴカードの表示（5×5グリッド）
+card = st.session_state.bingo_card
+checked = st.session_state.checked
+names = st.session_state.names
+
+# 各行を表示
+for row_idx in range(5):
+    cols = st.columns(5)
+    for col_idx in range(5):
+        with cols[col_idx]:
+            cell_value = card[row_idx][col_idx]
+            is_checked = checked[row_idx][col_idx]
+            is_free = cell_value == "FREE"
+            cell_name = names[row_idx][col_idx]
             
-            with cols[col]:
-                # FREEマス
-                if value == 'FREE':
-                    st.button(
-                        "⭐ FREE ⭐",
-                        key=f"cell_{row}_{col}",
-                        disabled=True,
-                        use_container_width=True,
-                        type="primary"
-                    )
-                # マーク済みマス
-                elif is_marked:
-                    name = st.session_state.marked_cells[(row, col)]
-                    button_text = f"{value}\n\n✅ {name}"
-                    if st.button(
-                        button_text,
-                        key=f"cell_{row}_{col}",
-                        use_container_width=True,
-                        type="primary"
-                    ):
-                        st.session_state.selected_cell = (row, col)
-                        st.rerun()
-                # 未マークマス
+            # ボタンのラベル
+            if is_free:
+                label = "FREE"
+                button_type = "secondary"
+            else:
+                # 項目名を表示
+                label = str(cell_value)
+                # チェックマークを追加
+                if is_checked:
+                    label = f"✓ {label}"
+                # 名前が入力されている場合は改行して表示
+                if cell_name:
+                    label = f"{label}\n\n{cell_name}"
+                button_type = "primary" if is_checked else "secondary"
+            
+            # ボタンを作成
+            if st.button(
+                label,
+                key=f"cell_{row_idx}_{col_idx}",
+                type=button_type,
+                disabled=is_free,
+                use_container_width=True
+            ):
+                # マスがまだチェックされていない場合は名前入力ダイアログを表示
+                if not is_checked:
+                    st.session_state.current_cell = (row_idx, col_idx)
+                    st.rerun()
                 else:
-                    if st.button(
-                        value,
-                        key=f"cell_{row}_{col}",
-                        use_container_width=True,
-                        type="secondary"
-                    ):
-                        st.session_state.selected_cell = (row, col)
-                        st.rerun()
-    
-    st.divider()
-    
-    # 統計情報
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("📊 総項目数", len(ITEM_LIST))
-    with col2:
-        st.metric("✅ マーク済み", f"{len(st.session_state.marked_cells)}/25")
-    with col3:
-        st.metric("🎯 ビンゴライン", bingo_count)
+                    # すでにチェック済みの場合はチェックを外す
+                    st.session_state.checked[row_idx][col_idx] = False
+                    st.session_state.names[row_idx][col_idx] = ""
+                    st.rerun()
+
+# ダイアログの表示処理
+if st.session_state.current_cell is not None:
+    row, col = st.session_state.current_cell
+    cell_value = card[row][col]
+    show_name_input_dialog(row, col, cell_value)
+
+# ビンゴのチェック
+bingo_count = check_bingo(st.session_state.checked)
+
+# ビンゴ状態の表示
+st.markdown("---")
+if bingo_count > 0:
+    st.balloons()  # 風船を表示
+    st.success(f"🎉 {bingo_count}つのビンゴが揃いました！")
+else:
+    st.info("💡 アイテムをタップしてマークしましょう！")
+
+# 使い方の説明（折りたたみ式）
+with st.expander("📖 使い方"):
+    st.markdown("""
+    1. **アイテムをタップ**: 呼ばれたアイテムをタップします
+    2. **名前を入力**: 名前入力画面が表示されるので、名前を入力して「決定」をタップ
+    3. **名前の表示**: 入力した名前が項目の下に表示されます
+    4. **チェック解除**: チェック済みのマスをタップすると、チェックと名前が解除されます
+    5. **ビンゴ**: 縦・横・斜めのいずれかが揃うとビンゴです
+    6. **FREE**: 中央のマスは最初からマーク済みです
+    7. **新しいカード**: ページを再読み込みすると新しいカードが生成されます
+    8. **カスタマイズ**: コード内のBINGO_ITEMSリストを編集して好きなアイテムに変更できます
+    """)
