@@ -77,14 +77,14 @@ st.markdown("""
        key="cell_*_*" のボタン
        ======================================== */
     .stButton:has(button[data-testid*="baseButton"]) {
-        width: 20% !important;
+        width: 240px !important;
         padding: 2px !important;
         box-sizing: border-box !important;
     }
     
     /* cell_で始まるkeyを持つボタン = ビンゴマス（正方形） */
     button[aria-label*="cell_"] {
-        width: 20% !important;
+        width: 240px !important;
         aspect-ratio: 1 / 1 !important;  /* 正方形 */
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
@@ -113,7 +113,7 @@ st.markdown("""
         width: 100% !important;
         aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
         padding: 0.75rem 1.5rem !important;
-        height: auto !important;
+        height: 100px !important;
         min-height: 0 !important;
         display: flex !important;
         flex-direction: row !important;
