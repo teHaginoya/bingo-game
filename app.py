@@ -58,7 +58,7 @@ st.markdown("""
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
-        width: 100% !important;
+        # width: 100% !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         margin: 0 !important;
