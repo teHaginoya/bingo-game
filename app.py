@@ -5,7 +5,7 @@ st.set_page_config(
     page_title="ビンゴゲーム", 
     page_icon="🎯", 
     layout="centered",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 st.markdown("""
@@ -16,13 +16,43 @@ st.markdown("""
         font-size: 16px;
         font-weight: bold;
         border-radius: 10px;
+        white-space: normal;
+        word-wrap: break-word;
     }
     </style>
     """, unsafe_allow_html=True)
 
+# ===== ここに項目リストを追加してください =====
+ITEM_LIST = [
+    "項目1",
+    "項目2",
+    "項目3",
+    "項目4",
+    "項目5",
+    "項目6",
+    "項目7",
+    "項目8",
+    "項目9",
+    "項目10",
+    "項目11",
+    "項目12",
+    "項目13",
+    "項目14",
+    "項目15",
+    "項目16",
+    "項目17",
+    "項目18",
+    "項目19",
+    "項目20",
+    "項目21",
+    "項目22",
+    "項目23",
+    "項目24",
+    # 必要に応じて追加してください（24個以上推奨）
+]
+# ==========================================
+
 # セッションステートの初期化
-if 'item_list' not in st.session_state:
-    st.session_state.item_list = []
 if 'bingo_card' not in st.session_state:
     st.session_state.bingo_card = None
 if 'marked_cells' not in st.session_state:
@@ -33,7 +63,7 @@ def generate_bingo_card(items):
     if len(items) < 24:
         return None
     
-    # 24個をランダムに選択（中央はFREE）
+    # 24個をランダムに選択
     selected = random.sample(items, 24)
     
     # 5x5の配列に変換
@@ -85,77 +115,31 @@ def toggle_cell(row, col):
     else:
         st.session_state.marked_cells.add((row, col))
 
-# サイドバー：項目管理
-with st.sidebar:
-    st.header("📝 項目管理")
-    
-    # 新規項目追加
-    new_item = st.text_input("新しい項目を追加", key="new_item_input")
-    if st.button("➕ 追加", use_container_width=True):
-        if new_item and new_item not in st.session_state.item_list:
-            st.session_state.item_list.append(new_item)
-            st.success(f"追加しました: {new_item}")
-            st.rerun()
-        elif new_item in st.session_state.item_list:
-            st.warning("既に登録されています")
-        else:
-            st.warning("項目を入力してください")
-    
-    st.divider()
-    
-    # 登録済み項目リスト
-    st.subheader(f"登録項目 ({len(st.session_state.item_list)}個)")
-    
-    if st.session_state.item_list:
-        # 項目削除
-        items_to_delete = []
-        for i, item in enumerate(st.session_state.item_list):
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                st.write(f"{i+1}. {item}")
-            with col2:
-                if st.button("🗑️", key=f"delete_{i}"):
-                    items_to_delete.append(item)
-        
-        # 削除処理
-        for item in items_to_delete:
-            st.session_state.item_list.remove(item)
-            st.rerun()
-        
-        st.divider()
-        
-        # 全削除
-        if st.button("🗑️ 全て削除", use_container_width=True):
-            st.session_state.item_list = []
-            st.session_state.bingo_card = None
-            st.session_state.marked_cells = set()
-            st.rerun()
-    else:
-        st.info("項目を追加してください")
-    
-    st.divider()
-    
-    # カード生成
-    st.subheader("🎯 ビンゴカード")
-    
-    if len(st.session_state.item_list) >= 24:
-        if st.button("🆕 新しいカードを生成", use_container_width=True):
-            st.session_state.bingo_card = generate_bingo_card(st.session_state.item_list)
-            st.session_state.marked_cells = {(2, 2)}
-            st.rerun()
-        
-        if st.session_state.bingo_card is not None:
-            if st.button("🔄 リセット", use_container_width=True):
-                st.session_state.marked_cells = {(2, 2)}
-                st.rerun()
-    else:
-        st.warning(f"あと{24 - len(st.session_state.item_list)}個必要です（最低24個）")
+# 初回アクセス時に自動でカード生成
+if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
+    st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
+    st.session_state.marked_cells = {(2, 2)}
 
-# メインエリア：ビンゴカード表示
+# タイトルとコントロール
 st.title("🎯 ビンゴカード")
 
+# コントロールボタン（コンパクトに配置）
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("🆕 新しいカード", use_container_width=True):
+        st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
+        st.session_state.marked_cells = {(2, 2)}
+        st.rerun()
+with col2:
+    if st.button("🔄 リセット", use_container_width=True):
+        st.session_state.marked_cells = {(2, 2)}
+        st.rerun()
+
+st.divider()
+
+# ビンゴカード表示
 if st.session_state.bingo_card is None:
-    st.info("👈 サイドバーで項目を追加して、カードを生成してください")
+    st.error("項目が不足しています（最低24個必要）")
 else:
     # ビンゴ判定
     bingo_count = check_bingo(st.session_state.marked_cells)
@@ -163,8 +147,6 @@ else:
     if bingo_count > 0:
         st.balloons()
         st.success(f"🎉 {bingo_count}ライン達成！")
-    
-    st.divider()
     
     # ビンゴカード表示
     for row in range(5):
@@ -205,10 +187,8 @@ else:
     st.divider()
     
     # 統計情報
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     with col1:
-        st.metric("総項目数", len(st.session_state.item_list))
+        st.metric("マーク済み", f"{len(st.session_state.marked_cells)}/25")
     with col2:
-        st.metric("マーク済み", len(st.session_state.marked_cells))
-    with col3:
         st.metric("ビンゴライン", bingo_count)
