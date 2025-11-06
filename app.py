@@ -88,17 +88,17 @@ st.markdown("""
     }
     
     /* コントロールボタンエリアの列 */
-    .main > div:first-child div[data-testid="column"] {
+    .control-buttons div[data-testid="column"] {
         width: 33.333% !important;
         flex: 1 1 33.333% !important;
     }
     
-    /* コントロールボタン */
-    .main > div:first-child .stButton button {
+    /* コントロールボタン - 正方形を解除して小さく */
+    .control-buttons .stButton button {
         aspect-ratio: auto !important;
-        height: 45px !important;
-        font-size: 1rem;
-        border-radius: 22px;
+        height: 40px !important;
+        font-size: 0.9rem;
+        border-radius: 20px;
         background: white;
         color: #0288D1;
         border: 2px solid #4FC3F7;
@@ -127,7 +127,7 @@ st.markdown("""
     
     /* 区切り線 */
     hr {
-        margin: 1rem 0;
+        margin: 0.8rem 0;
         border: none;
         height: 2px;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
@@ -144,7 +144,7 @@ st.markdown("""
         text-align: center;
         border: 2px solid #FF6B6B;
         box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        margin: 1rem 0;
+        margin: 0.8rem 0;
     }
     
     /* ダイアログのスタイル */
@@ -203,79 +203,36 @@ st.markdown("""
         h1 {
             font-size: 1.8rem !important;
         }
+        
+        .control-buttons .stButton button {
+            height: 38px !important;
+            font-size: 0.85rem;
+        }
     }
     
-    /* スマホ用の調整 */
+    /* スマホ用の調整 - 全体が見えるように */
     @media (max-width: 768px) {
         .main .block-container {
-            padding: 0.5rem;
-            max-width: 100%;
-        }
-        
-        .stButton button {
-            font-size: 0.6rem;
-            border-radius: 6px;
-            border-width: 1.5px;
-            padding: 2px;
-        }
-        
-        h1 {
-            font-size: 1.4rem !important;
-            margin: 0.3rem 0 !important;
-        }
-        
-        .main > div:first-child .stButton button {
-            height: 38px !important;
-            font-size: 0.9rem;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 1.2rem;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.75rem;
-        }
-        
-        div[data-testid="metric-container"] {
-            padding: 8px;
-        }
-        
-        .stSuccess {
-            padding: 10px;
-            font-size: 0.95rem;
-            margin: 0.5rem 0;
-        }
-        
-        .bingo-count-display {
-            font-size: 0.95rem;
-            padding: 6px;
-        }
-        
-        hr {
-            margin: 0.5rem 0;
-        }
-    }
-    
-    /* さらに小さい画面用 */
-    @media (max-width: 480px) {
-        .main .block-container {
             padding: 0.3rem;
+            max-width: 100%;
         }
         
         .stButton button {
             font-size: 0.55rem;
             border-radius: 5px;
-            padding: 1px;
+            border-width: 1.5px;
+            padding: 2px;
         }
         
         h1 {
             font-size: 1.2rem !important;
+            margin: 0.2rem 0 !important;
         }
         
-        .main > div:first-child .stButton button {
-            height: 34px !important;
-            font-size: 0.85rem;
+        .control-buttons .stButton button {
+            height: 32px !important;
+            font-size: 0.8rem;
+            border-radius: 16px;
         }
         
         [data-testid="stMetricValue"] {
@@ -284,6 +241,66 @@ st.markdown("""
         
         [data-testid="stMetricLabel"] {
             font-size: 0.7rem;
+        }
+        
+        div[data-testid="metric-container"] {
+            padding: 6px;
+        }
+        
+        .stSuccess {
+            padding: 8px;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+        }
+        
+        .bingo-count-display {
+            font-size: 0.85rem;
+            padding: 5px;
+            margin-top: 5px;
+        }
+        
+        hr {
+            margin: 0.4rem 0;
+        }
+        
+        div[data-testid="column"] {
+            padding: 1px !important;
+        }
+    }
+    
+    /* さらに小さい画面用 */
+    @media (max-width: 480px) {
+        .main .block-container {
+            padding: 0.2rem;
+        }
+        
+        .stButton button {
+            font-size: 0.5rem;
+            border-radius: 4px;
+            padding: 1px;
+        }
+        
+        h1 {
+            font-size: 1rem !important;
+            margin: 0.1rem 0 !important;
+        }
+        
+        .control-buttons .stButton button {
+            height: 28px !important;
+            font-size: 0.75rem;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 0.9rem;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.65rem;
+        }
+        
+        .bingo-count-display {
+            font-size: 0.75rem;
+            padding: 4px;
         }
     }
     </style>
@@ -396,7 +413,8 @@ if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
 # タイトル
 st.title("🎯 ビンゴカード")
 
-# コントロールボタン
+# コントロールボタン（クラス名を追加）
+st.markdown('<div class="control-buttons">', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("🆕 新規", use_container_width=True):
@@ -419,6 +437,7 @@ with col3:
     if st.session_state.bingo_card:
         bingo_count = check_bingo(st.session_state.marked_cells)
         st.markdown(f"<div class='bingo-count-display'>🏆 {bingo_count}</div>", unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.divider()
 
