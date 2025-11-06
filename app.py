@@ -107,7 +107,7 @@ st.markdown("""
     /* コントロールボタン - トロフィーと同じ高さ */
     .control-area .stButton button {
         aspect-ratio: auto !important;
-        height: 50px !important;
+        height: 25px !important;
         min-height: 50px !important;
         max-height: 50px !important;
         font-size: 0.9rem;
@@ -117,7 +117,7 @@ st.markdown("""
         border: 2px solid #4FC3F7;
     }
     
-    /* ビンゴ数表示 - トロフィーと同じ高さ */
+    /* ビンゴ数表示 */
     .bingo-count-display {
         text-align: center;
         color: white;
@@ -127,8 +127,8 @@ st.markdown("""
         background: rgba(255, 215, 0, 0.3);
         padding: 12px 8px;
         border-radius: 10px;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        height: 50px;
+        border: 2px solid rga(255, 255, 255, 0.5);
+        height: 50px;b
         display: flex;
         align-items: center;
         justify-content: center;
@@ -292,7 +292,7 @@ st.markdown("""
             border-radius: 3px !important;
             border-width: 1px !important;
             padding: 1px !important;
-            max-height: 55px !important;
+            max-height: 10px !important;
             line-height: 1 !important;
         }
         
@@ -337,7 +337,7 @@ st.markdown("""
         .stButton button {
             font-size: 0.38rem !important;
             border-radius: 2px !important;
-            max-height: 50px !important;
+            max-height: 10px !important;
         }
         
         [data-testid="stMetricValue"] {
@@ -376,7 +376,7 @@ st.markdown("""
         .stButton button {
             font-size: 0.35rem !important;
             border-radius: 2px !important;
-            max-height: 45px !important;
+            max-height: 7px !important;
             padding: 0.5px !important;
         }
         
