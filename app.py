@@ -18,7 +18,7 @@ st.markdown("""
         border-radius: 10px;
         white-space: normal;
         word-wrap: break-word;
-        line-height: 1.2;
+        line-height: 1.3;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -57,7 +57,7 @@ ITEM_LIST = [
 if 'bingo_card' not in st.session_state:
     st.session_state.bingo_card = None
 if 'marked_cells' not in st.session_state:
-    st.session_state.marked_cells = {}  # {(row, col): "名前"}の辞書に変更
+    st.session_state.marked_cells = {}  # {(row, col): "名前"}の辞書
 if 'show_dialog' not in st.session_state:
     st.session_state.show_dialog = False
 if 'selected_cell' not in st.session_state:
@@ -148,7 +148,10 @@ if st.session_state.show_dialog and st.session_state.selected_cell:
         item_name = st.session_state.bingo_card[row][col]
         st.write(f"**項目:** {item_name}")
         
-        name = st.text_input("お名前", key="name_input", placeholder="山田太郎")
+        # 既存の名前があれば表示
+        current_name = st.session_state.marked_cells.get((row, col), "")
+        
+        name = st.text_input("お名前", value=current_name, key="name_input", placeholder="山田太郎")
         
         col1, col2, col3 = st.columns(3)
         
@@ -209,8 +212,10 @@ else:
                 # マーク済みマス
                 elif is_marked:
                     name = st.session_state.marked_cells[(row, col)]
+                    # 項目名と名前を改行で分けて表示
+                    button_text = f"{value}\n---\n✅ {name}"
                     if st.button(
-                        f"✅ {name}\n{value}",
+                        button_text,
                         key=f"cell_{row}_{col}",
                         use_container_width=True,
                         type="primary"
