@@ -44,7 +44,7 @@ st.markdown("""
         max-width: 100%;
     }
     
-    /* カラムコンテナの設定 - 5つ並ぶように */
+    /* カラムコンテナの設定 - ボタンが20%の時に綺麗に並ぶように */
     [data-testid="column"] {
         width: 20% !important;
         flex: 0 0 20% !important;
@@ -52,6 +52,7 @@ st.markdown("""
         min-width: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
+        box-sizing: border-box !important;
     }
     
     /* 行の設定 */
@@ -60,20 +61,25 @@ st.markdown("""
         width: 100% !important;
         display: flex !important;
         flex-wrap: nowrap !important;
+        margin: 0 !important;
     }
     
     /* ボタンのコンテナ */
     .element-container:has(.stButton) {
         width: 100% !important;
-        padding: 2px !important;
+        padding: 0 !important;
         margin: 0 !important;
+        box-sizing: border-box !important;
     }
     
-    /* Streamlitのボタンを正方形にするスタイル */
+    /* Streamlitのボタンコンテナ */
     .stButton {
         width: 100% !important;
+        padding: 2px !important;
+        box-sizing: border-box !important;
     }
     
+    /* ボタン自体を20%に設定 */
     .stButton > button {
         width: 100% !important;
         aspect-ratio: 1 / 1 !important;
@@ -153,7 +159,7 @@ st.markdown("""
             margin-bottom: 0.5rem;
         }
         
-        .element-container:has(.stButton) {
+        .stButton {
             padding: 1.5px !important;
         }
         
@@ -182,7 +188,7 @@ st.markdown("""
             margin-bottom: 0.3rem;
         }
         
-        .element-container:has(.stButton) {
+        .stButton {
             padding: 1px !important;
         }
         
@@ -209,7 +215,7 @@ st.markdown("""
             font-size: 1.2rem;
         }
         
-        .element-container:has(.stButton) {
+        .stButton {
             padding: 0.5px !important;
         }
         
