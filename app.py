@@ -13,32 +13,28 @@ st.set_page_config(
 # カスタムCSS - マスを大幅に小さく
 st.markdown("""
 <style>
-/* ======== 共通（PC基準） ======== */
-
-/* 背景 */
+/* ====== 全体背景 ====== */
 .stApp {
     background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
 }
 
-/* メインコンテナ */
+/* ====== メインコンテンツエリア ====== */
 .main .block-container {
     padding: 1rem;
-    max-width: 600px;
+    max-width: 500px; /* 全体を少しコンパクトに */
     margin: 0 auto;
 }
 
-/* タイトル */
+/* ====== タイトル ====== */
 h1 {
     color: white;
     text-align: center;
-    font-size: 2rem !important;
+    font-size: 1.6rem !important;
     margin: 0.5rem 0 !important;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-/* ======== ビンゴのグリッド構造 ======== */
-
-/* 横5列を固定（5×5） */
+/* ====== ビンゴの行（横並び5列固定） ====== */
 div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -46,18 +42,17 @@ div[data-testid="stHorizontalBlock"] {
     gap: 4px;
 }
 
-/* 各列（マス1つ分） */
+/* ====== 各列（マス1つ分） ====== */
 div[data-testid="column"] {
-    flex: 0 0 calc(20% - 4px);  /* 常に5列構成に */
+    flex: 0 0 calc(20% - 4px);  /* 5×5構成固定 */
     padding: 2px !important;
 }
 
-/* ======== マスのスタイル ======== */
-
+/* ====== ボタン（マス） ====== */
 .stButton button {
     width: 100%;
-    aspect-ratio: 1 / 1;  /* 正方形を維持 */
-    font-size: 0.75rem;
+    aspect-ratio: 1 / 1; /* 正方形維持 */
+    font-size: 0.6rem; /* 小さめの文字 */
     border-radius: 6px;
     border: 2px solid #B0E0E6;
     background: white;
@@ -67,111 +62,68 @@ div[data-testid="column"] {
     transition: all 0.2s ease;
     white-space: normal;
     word-wrap: break-word;
-    line-height: 1.2;
+    line-height: 1.1;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* ホバー時 */
+/* ====== ボタン（ホバー時） ====== */
 .stButton button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* プライマリ（マーク済） */
+/* ====== マーク済みボタン ====== */
 .stButton button[kind="primary"] {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #333;
     border: 2px solid #FF6B6B;
+    color: #333;
 }
 
-/* ======== ビンゴ情報部分 ======== */
+/* ====== 未マークボタン ====== */
+.stButton button[kind="secondary"] {
+    background: white;
+    color: #333;
+    border: 2px solid #B0E0E6;
+}
 
+/* ====== ビンゴ数表示 ====== */
 .bingo-count-display {
     text-align: center;
     color: white;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
     background: rgba(255, 215, 0, 0.3);
-    padding: 12px 8px;
-    border-radius: 10px;
+    padding: 8px;
+    border-radius: 8px;
     border: 2px solid rgba(255, 255, 255, 0.5);
-    margin: 10px auto;
+    margin: 12px auto;
 }
 
-/* ======== レスポンシブ対応 ======== */
-
-/* タブレット（中くらいのサイズ） */
-@media (max-width: 1024px) {
-    .main .block-container {
-        max-width: 500px !important;
-    }
-    .stButton button {
-        font-size: 0.65rem;
-    }
+/* ====== 区切り線 ====== */
+hr {
+    margin: 0.8rem 0;
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
 }
 
-/* スマホ（標準） */
-@media (max-width: 768px) {
-    .main .block-container {
-        max-width: 350px !important;
-        padding: 0.5rem !important;
-    }
-    h1 {
-        font-size: 1.2rem !important;
-    }
-    div[data-testid="column"] {
-        flex: 0 0 calc(20% - 2px) !important;
-        padding: 1px !important;
-    }
-    .stButton button {
-        font-size: 0.45rem !important;
-        border-width: 1px !important;
-        border-radius: 4px !important;
-    }
-}
-
-/* 小型スマホ（iPhone SEなど） */
-@media (max-width: 480px) {
-    .main .block-container {
-        max-width: 300px !important;
-        padding: 0.3rem !important;
-    }
-    h1 {
-        font-size: 1rem !important;
-    }
-    div[data-testid="column"] {
-        flex: 0 0 calc(20% - 2px) !important;
-        padding: 0.5px !important;
-    }
-    .stButton button {
-        font-size: 0.35rem !important;
-        border-width: 1px !important;
-        border-radius: 3px !important;
-    }
-}
-
-/* 超小型画面（Galaxy Foldなど） */
-@media (max-width: 375px) {
-    .main .block-container {
-        max-width: 260px !important;
-        padding: 0.2rem !important;
-    }
-    h1 {
-        font-size: 0.9rem !important;
-    }
-    div[data-testid="column"] {
-        flex: 0 0 calc(20% - 1px) !important;
-    }
-    .stButton button {
-        font-size: 0.3rem !important;
-        border-width: 1px !important;
-        border-radius: 2px !important;
-    }
+/* ====== 成功メッセージ ====== */
+.stSuccess {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid #FF6B6B;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 
