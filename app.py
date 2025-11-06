@@ -14,7 +14,6 @@ st.markdown("""
     <style>
     /* 水色のグラデーション背景 */
     .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
     }
     
@@ -228,6 +227,8 @@ if 'selected_cell' not in st.session_state:
     st.session_state.selected_cell = None
 if 'flip_cell' not in st.session_state:
     st.session_state.flip_cell = None
+if 'last_bingo_count' not in st.session_state:
+    st.session_state.last_bingo_count = 0
 
 def generate_bingo_card(items):
     """カスタム項目でビンゴカードを生成"""
@@ -272,6 +273,26 @@ def check_bingo(marked):
     
     return bingo_count
 
+def show_bingo_effect(bingo_count):
+    """ビンゴ数に応じたエフェクトを表示"""
+    if bingo_count == 1:
+        # 1ライン: 風船のみ
+        st.balloons()
+    elif bingo_count == 2:
+        # 2ライン: 風船 + 雪
+        st.balloons()
+        time.sleep(0.2)
+        st.snow()
+    elif bingo_count >= 3:
+        # 3ライン以上: ビンゴ数に応じて繰り返し
+        for i in range(min(bingo_count, 5)):  # 最大5回まで
+            if i % 2 == 0:
+                st.balloons()
+            else:
+                st.snow()
+            if i < bingo_count - 1:
+                time.sleep(0.3)
+
 # 初回アクセス時に自動でカード生成
 if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
     st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
@@ -288,6 +309,7 @@ with col1:
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
         st.session_state.flip_cell = None
+        st.session_state.last_bingo_count = 0
         st.rerun()
 
 with col2:
@@ -295,6 +317,7 @@ with col2:
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
         st.session_state.flip_cell = None
+        st.session_state.last_bingo_count = 0
         st.rerun()
 
 with col3:
@@ -346,22 +369,6 @@ if st.session_state.selected_cell:
     row, col = st.session_state.selected_cell
     name_input_dialog(row, col)
 
-# フリップアニメーション用のJavaScript
-if st.session_state.flip_cell:
-    flip_row, flip_col = st.session_state.flip_cell
-    st.markdown(f"""
-        <script>
-        setTimeout(function() {{
-            const button = document.querySelector('[data-testid="baseButton-secondary"]:nth-of-type({flip_row * 5 + flip_col + 1})');
-            if (button) {{
-                button.classList.add('flip-animation');
-            }}
-        }}, 100);
-        </script>
-    """, unsafe_allow_html=True)
-    # アニメーション後にクリア
-    st.session_state.flip_cell = None
-
 # ビンゴカード表示
 if st.session_state.bingo_card is None:
     st.error("❌ 項目が不足しています（最低24個必要）")
@@ -369,9 +376,18 @@ else:
     # ビンゴ判定
     bingo_count = check_bingo(st.session_state.marked_cells)
     
-    if bingo_count > 0:
-        st.balloons()
-        st.success(f"🎉🎊 おめでとうございます！{bingo_count}ライン達成！ 🎊🎉")
+    # ビンゴ数が増えた場合のみエフェクト表示
+    if bingo_count > st.session_state.last_bingo_count:
+        show_bingo_effect(bingo_count)
+        st.session_state.last_bingo_count = bingo_count
+    
+    # ビンゴメッセージ
+    if bingo_count == 1:
+        st.success(f"🎉 素晴らしい！{bingo_count}ライン達成！")
+    elif bingo_count == 2:
+        st.success(f"🎊🎉 すごい！{bingo_count}ライン達成！ 🎉🎊")
+    elif bingo_count >= 3:
+        st.success(f"🎆🎊🎉 完璧です！{bingo_count}ライン達成！ 🎉🎊🎆")
     
     # ビンゴカード表示
     for row in range(5):
