@@ -39,7 +39,23 @@ st.markdown("""
     .block-container {
         padding-top: 1rem;
         padding-bottom: 1rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
         max-width: 100%;
+    }
+    
+    /* カラムコンテナの設定 */
+    [data-testid="column"] {
+        width: calc(20% - 4px) !important;
+        flex: 1 1 calc(20% - 4px) !important;
+        min-width: 0 !important;
+        padding: 2px !important;
+    }
+    
+    /* 行の設定 */
+    .row-widget.stHorizontal {
+        gap: 0 !important;
+        width: 100% !important;
     }
     
     /* Streamlitのボタンを正方形にするスタイル */
@@ -53,7 +69,7 @@ st.markdown("""
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: clamp(0.7rem, 3vw, 1rem) !important;
+        font-size: clamp(0.7rem, 2.5vw, 1rem) !important;
         font-weight: normal !important;
         border-radius: 8px !important;
         border: 2px solid #333 !important;
@@ -96,16 +112,6 @@ st.markdown("""
         opacity: 1 !important;
     }
     
-    /* カラムの間隔調整 */
-    div[data-testid="column"] {
-        padding: 0.15rem !important;
-    }
-    
-    /* 行の間隔調整 */
-    .row-widget.stHorizontal {
-        gap: 0 !important;
-    }
-    
     /* Streamlitのデフォルト余白を削除 */
     .element-container {
         margin-bottom: 0.3rem !important;
@@ -121,19 +127,25 @@ st.markdown("""
             padding: 0.3rem;
         }
         
+        .block-container {
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+        
         h1 {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
         
-        .stButton > button {
-            font-size: clamp(0.65rem, 3.5vw, 0.9rem) !important;
-            padding: 0.3rem 0.1rem !important;
-            border-width: 1.5px !important;
+        [data-testid="column"] {
+            padding: 1.5px !important;
         }
         
-        div[data-testid="column"] {
-            padding: 0.1rem !important;
+        .stButton > button {
+            font-size: clamp(0.6rem, 2.8vw, 0.85rem) !important;
+            padding: 0.3rem 0.1rem !important;
+            border-width: 1.5px !important;
+            border-radius: 6px !important;
         }
     }
     
@@ -143,18 +155,25 @@ st.markdown("""
             padding: 0.2rem;
         }
         
+        .block-container {
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+        }
+        
         h1 {
             font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        [data-testid="column"] {
+            padding: 1px !important;
         }
         
         .stButton > button {
-            font-size: clamp(0.6rem, 3.8vw, 0.85rem) !important;
-            padding: 0.25rem 0.1rem !important;
+            font-size: clamp(0.55rem, 3vw, 0.75rem) !important;
+            padding: 0.2rem 0.05rem !important;
             line-height: 1.3 !important;
-        }
-        
-        div[data-testid="column"] {
-            padding: 0.08rem !important;
+            border-radius: 4px !important;
         }
         
         .element-container {
