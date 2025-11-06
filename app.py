@@ -25,7 +25,7 @@ st.markdown("""
     /* メインコンテナの調整 */
     .main {
         padding: 0.5rem;
-        max-width: 1000px;
+        max-width: 100%;
     }
     
     /* タイトルのスタイル */
@@ -41,14 +41,14 @@ st.markdown("""
         padding-bottom: 1rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-        max-width: 1000px;
+        max-width: 100%;
     }
     
     /* カラムコンテナの設定 - 5つ並ぶように */
     [data-testid="column"] {
-        width: 200px !important;
-        flex: 0 0 200px !important;
-        max-width: 200px !important;
+        width: 20% !important;
+        flex: 0 0 20% !important;
+        max-width: 20% !important;
         min-width: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -58,7 +58,7 @@ st.markdown("""
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
-        width: 200px !important;
+        width: 100% !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         margin: 0 !important;
@@ -66,7 +66,7 @@ st.markdown("""
     
     /* ボタンのコンテナ */
     .element-container:has(.stButton) {
-        width: 200px !important;
+        width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
         box-sizing: border-box !important;
@@ -77,13 +77,14 @@ st.markdown("""
        key="cell_*_*" のボタン
        ======================================== */
     .stButton:has(button[data-testid*="baseButton"]) {
+        width: 100% !important;
         padding: 2px !important;
         box-sizing: border-box !important;
     }
     
     /* cell_で始まるkeyを持つボタン = ビンゴマス（正方形） */
     button[aria-label*="cell_"] {
-        width: 200px !important;
+        width: 100% !important;
         aspect-ratio: 1 / 1 !important;  /* 正方形 */
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
@@ -109,10 +110,10 @@ st.markdown("""
        ======================================== */
     button[aria-label*="submit"],
     button[aria-label*="cancel"] {
-        width: 350px !important;
+        width: 100% !important;
         aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
         padding: 0.75rem 1.5rem !important;
-        height: 100px !important;
+        height: auto !important;
         min-height: 0 !important;
         display: flex !important;
         flex-direction: row !important;
@@ -167,7 +168,89 @@ st.markdown("""
     .row-widget {
         margin-bottom: 0 !important;
     }
-
+    
+    /* スマホ画面での調整 (768px以下) */
+    @media (max-width: 768px) {
+        .main {
+            padding: 0.3rem;
+        }
+        
+        .block-container {
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stButton:has(button[aria-label*="cell_"]) {
+            padding: 1.5px !important;
+        }
+        
+        button[aria-label*="cell_"] {
+            font-size: clamp(0.6rem, 2.8vw, 0.85rem) !important;
+            padding: 0.3rem 0.1rem !important;
+            border-width: 1.5px !important;
+            border-radius: 6px !important;
+        }
+    }
+    
+    /* 非常に小さい画面（480px以下） */
+    @media (max-width: 480px) {
+        .main {
+            padding: 0.2rem;
+        }
+        
+        .block-container {
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+            padding-top: 0.5rem;
+        }
+        
+        h1 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stButton:has(button[aria-label*="cell_"]) {
+            padding: 1px !important;
+        }
+        
+        button[aria-label*="cell_"] {
+            font-size: clamp(0.55rem, 3vw, 0.75rem) !important;
+            padding: 0.2rem 0.05rem !important;
+            line-height: 1.3 !important;
+            border-radius: 4px !important;
+            border-width: 1px !important;
+        }
+    }
+    
+    /* 超小型画面（360px以下） */
+    @media (max-width: 360px) {
+        .main {
+            padding: 0.1rem;
+        }
+        
+        .block-container {
+            padding: 0.1rem;
+        }
+        
+        h1 {
+            font-size: 1.2rem;
+        }
+        
+        .stButton:has(button[aria-label*="cell_"]) {
+            padding: 0.5px !important;
+        }
+        
+        button[aria-label*="cell_"] {
+            font-size: clamp(0.5rem, 3.2vw, 0.7rem) !important;
+            padding: 0.15rem 0.05rem !important;
+            border-radius: 3px !important;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -328,3 +411,16 @@ if bingo_count > 0:
     st.success(f"🎉 {bingo_count}つのビンゴが揃いました！")
 else:
     st.info("💡 アイテムをタップしてマークしましょう！")
+
+# 使い方の説明（折りたたみ式）
+with st.expander("📖 使い方"):
+    st.markdown("""
+    1. **アイテムをタップ**: 呼ばれたアイテムをタップします
+    2. **名前を入力**: 名前入力画面が表示されるので、名前を入力して「決定」をタップ
+    3. **名前の表示**: 入力した名前が項目の下に表示されます
+    4. **チェック解除**: チェック済みのマスをタップすると、チェックと名前が解除されます
+    5. **ビンゴ**: 縦・横・斜めのいずれかが揃うとビンゴです
+    6. **FREE**: 中央のマスは最初からマーク済みです
+    7. **新しいカード**: ページを再読み込みすると新しいカードが生成されます
+    8. **カスタマイズ**: コード内のBINGO_ITEMSリストを編集して好きなアイテムに変更できます
+    """)
