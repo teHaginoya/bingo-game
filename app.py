@@ -81,7 +81,7 @@ st.markdown("""
     
     /* ボタン自体を20%に設定 */
     .stButton > button {
-        width: 100% !important;
+        width: 20% !important;
         aspect-ratio: 1 / 1 !important;
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
