@@ -25,41 +25,42 @@ st.markdown("""
     /* メインコンテナの調整 */
     .main {
         padding: 0.5rem;
-        max-width: 600px;
+        max-width: 100%;
     }
     
     /* タイトルのスタイル */
     h1 {
         text-align: center;
-        font-size: 1.8rem;
+        font-size: clamp(1.5rem, 5vw, 1.8rem);
         margin-bottom: 1rem;
     }
     
     /* ビンゴカード全体のコンテナ */
-    .bingo-grid-container {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        max-width: 100%;
     }
     
     /* Streamlitのボタンを正方形にするスタイル */
     .stButton > button {
         width: 100% !important;
         aspect-ratio: 1 !important;
-        padding: 0.4rem !important;
+        padding: 0.5rem 0.2rem !important;
         height: auto !important;
         min-height: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: clamp(0.6rem, 2.2vw, 0.8rem) !important;
-        font-weight: bold !important;
+        font-size: clamp(0.7rem, 3vw, 1rem) !important;
+        font-weight: normal !important;
         border-radius: 8px !important;
         border: 2px solid #333 !important;
         white-space: pre-line !important;
         word-wrap: break-word !important;
-        line-height: 1.3 !important;
+        line-height: 1.4 !important;
+        box-sizing: border-box !important;
     }
     
     /* ボタン内のテキストスタイル */
@@ -67,8 +68,10 @@ st.markdown("""
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
+        justify-content: center !important;
         gap: 0.2rem !important;
         text-align: center !important;
+        width: 100% !important;
     }
     
     /* チェック済みボタン（primary） */
@@ -95,16 +98,68 @@ st.markdown("""
     
     /* カラムの間隔調整 */
     div[data-testid="column"] {
-        padding: 2px !important;
+        padding: 0.15rem !important;
+    }
+    
+    /* 行の間隔調整 */
+    .row-widget.stHorizontal {
+        gap: 0 !important;
     }
     
     /* Streamlitのデフォルト余白を削除 */
     .element-container {
-        margin-bottom: 0 !important;
+        margin-bottom: 0.3rem !important;
     }
     
     .row-widget {
         margin-bottom: 0 !important;
+    }
+    
+    /* スマホ画面での調整 */
+    @media (max-width: 768px) {
+        .main {
+            padding: 0.3rem;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stButton > button {
+            font-size: clamp(0.65rem, 3.5vw, 0.9rem) !important;
+            padding: 0.3rem 0.1rem !important;
+            border-width: 1.5px !important;
+        }
+        
+        div[data-testid="column"] {
+            padding: 0.1rem !important;
+        }
+    }
+    
+    /* 非常に小さい画面（モバイル）での調整 */
+    @media (max-width: 480px) {
+        .main {
+            padding: 0.2rem;
+        }
+        
+        h1 {
+            font-size: 1.3rem;
+        }
+        
+        .stButton > button {
+            font-size: clamp(0.6rem, 3.8vw, 0.85rem) !important;
+            padding: 0.25rem 0.1rem !important;
+            line-height: 1.3 !important;
+        }
+        
+        div[data-testid="column"] {
+            padding: 0.08rem !important;
+        }
+        
+        .element-container {
+            margin-bottom: 0.2rem !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
