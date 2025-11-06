@@ -83,18 +83,6 @@ st.markdown("""
         opacity: 1 !important;
     }
     
-    /* 新規生成ボタン */
-    div[data-testid="column"] > div > div > div > button {
-        background-color: #4CAF50 !important;
-        color: white !important;
-        font-size: 1.1rem !important;
-        padding: 0.75rem !important;
-        border-radius: 8px !important;
-        margin-top: 1rem !important;
-        aspect-ratio: auto !important;
-        height: auto !important;
-    }
-    
     /* カラムの間隔調整 */
     div[data-testid="column"] {
         padding: 2px !important;
@@ -169,18 +157,11 @@ def check_bingo(checked):
 # タイトル
 st.title("🎯 ビンゴカード")
 
-# 新しいカードを生成ボタン
-if st.button("🔄 新しいカードを生成"):
-    st.session_state.bingo_card = generate_bingo_card()
-    st.session_state.checked = [[False for _ in range(5)] for _ in range(5)]
-    st.session_state.checked[2][2] = True  # フリースペースは最初からチェック済み
-    st.rerun()
-
-# 初回訪問時にカードを自動生成
+# アプリを開いた時に毎回新しいカードを生成
 if st.session_state.bingo_card is None:
     st.session_state.bingo_card = generate_bingo_card()
     st.session_state.checked = [[False for _ in range(5)] for _ in range(5)]
-    st.session_state.checked[2][2] = True
+    st.session_state.checked[2][2] = True  # フリースペースは最初からチェック済み
 
 # ビンゴカードの表示（5×5グリッド）
 card = st.session_state.bingo_card
@@ -234,7 +215,7 @@ with st.expander("📖 使い方"):
     st.markdown("""
     1. **アイテムをタップ**: 呼ばれたアイテムをタップしてマークします
     2. **ビンゴ**: 縦・横・斜めのいずれかが揃うとビンゴです
-    3. **新しいカード**: 上部のボタンで新しいカードを生成できます
-    4. **FREE**: 中央のマスは最初からマーク済みです
+    3. **FREE**: 中央のマスは最初からマーク済みです
+    4. **新しいカード**: ページを再読み込みすると新しいカードが生成されます
     5. **カスタマイズ**: コード内のBINGO_ITEMSリストを編集して好きなアイテムに変更できます
     """)
