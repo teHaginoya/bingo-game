@@ -66,7 +66,7 @@ st.markdown("""
     
     /* ボタンのコンテナ */
     .element-container:has(.stButton) {
-        width: 100% !important;
+        width: 20% !important;
         padding: 0 !important;
         margin: 0 !important;
         box-sizing: border-box !important;
