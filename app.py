@@ -18,10 +18,10 @@ st.markdown("""
     background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
 }
 
-/* ====== メインコンテンツエリア ====== */
+/* ====== メインエリア ====== */
 .main .block-container {
     padding: 1rem;
-    max-width: 500px; /* 全体を少しコンパクトに */
+    max-width: 500px;
     margin: 0 auto;
 }
 
@@ -34,7 +34,7 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-/* ====== ビンゴの行（横並び5列固定） ====== */
+/* ====== ビンゴカードの行 ====== */
 div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -42,17 +42,17 @@ div[data-testid="stHorizontalBlock"] {
     gap: 4px;
 }
 
-/* ====== 各列（マス1つ分） ====== */
+/* ====== 各マスの列 ====== */
 div[data-testid="column"] {
-    flex: 0 0 calc(20% - 4px);  /* 5×5構成固定 */
+    flex: 0 0 calc(20% - 4px);
     padding: 2px !important;
 }
 
-/* ====== ボタン（マス） ====== */
-.stButton button {
+/* ====== 🎯 ビンゴカードのマス（正方形） ====== */
+.bingo-card .stButton button {
     width: 100%;
     aspect-ratio: 1 / 1; /* 正方形維持 */
-    font-size: 0.6rem; /* 小さめの文字 */
+    font-size: 0.6rem;
     border-radius: 6px;
     border: 2px solid #B0E0E6;
     background: white;
@@ -68,24 +68,43 @@ div[data-testid="column"] {
     justify-content: center;
 }
 
-/* ====== ボタン（ホバー時） ====== */
-.stButton button:hover {
+/* ホバー時 */
+.bingo-card .stButton button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* ====== マーク済みボタン ====== */
-.stButton button[kind="primary"] {
+/* マーク済み */
+.bingo-card .stButton button[kind="primary"] {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     border: 2px solid #FF6B6B;
     color: #333;
 }
 
-/* ====== 未マークボタン ====== */
-.stButton button[kind="secondary"] {
+/* 未マーク */
+.bingo-card .stButton button[kind="secondary"] {
     background: white;
     color: #333;
     border: 2px solid #B0E0E6;
+}
+
+/* ====== 🔘 コントロールボタン（新規・リセットなど） ====== */
+.control-buttons .stButton button {
+    width: 100%;
+    height: 45px;
+    border-radius: 10px;
+    background: white;
+    color: #0288D1;
+    border: 2px solid #4FC3F7;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.control-buttons .stButton button:hover {
+    background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
+    color: white;
+    border: 2px solid #0288D1;
 }
 
 /* ====== ビンゴ数表示 ====== */
@@ -123,8 +142,6 @@ hr {
 }
 </style>
 """, unsafe_allow_html=True)
-
-
 
 
 # ===== ここに項目リストを追加してください =====
