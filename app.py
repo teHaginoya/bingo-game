@@ -46,9 +46,9 @@ st.markdown("""
     
     /* カラムコンテナの設定 - 5つ並ぶように */
     [data-testid="column"] {
-        width: 240px !important;
-        flex: 0 0 20% !important;
-        max-width: 240px !important;
+        width: 200px !important;
+        flex: 0 0 200px !important;
+        max-width: 200px !important;
         min-width: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -58,7 +58,7 @@ st.markdown("""
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
-        width: 240px !important;
+        width: 200px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         margin: 0 !important;
@@ -66,7 +66,7 @@ st.markdown("""
     
     /* ボタンのコンテナ */
     .element-container:has(.stButton) {
-        width: 240px !important;
+        width: 200px !important;
         padding: 0 !important;
         margin: 0 !important;
         box-sizing: border-box !important;
@@ -83,7 +83,7 @@ st.markdown("""
     
     /* cell_で始まるkeyを持つボタン = ビンゴマス（正方形） */
     button[aria-label*="cell_"] {
-        width: 240px !important;
+        width: 200px !important;
         aspect-ratio: 1 / 1 !important;  /* 正方形 */
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
@@ -109,7 +109,7 @@ st.markdown("""
        ======================================== */
     button[aria-label*="submit"],
     button[aria-label*="cancel"] {
-        width: 300px !important;
+        width: 350px !important;
         aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
         padding: 0.75rem 1.5rem !important;
         height: 100px !important;
