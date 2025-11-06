@@ -13,11 +13,12 @@ st.markdown("""
     .stButton button {
         width: 100%;
         height: 80px;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
         border-radius: 10px;
         white-space: normal;
         word-wrap: break-word;
+        line-height: 1.2;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -56,7 +57,11 @@ ITEM_LIST = [
 if 'bingo_card' not in st.session_state:
     st.session_state.bingo_card = None
 if 'marked_cells' not in st.session_state:
-    st.session_state.marked_cells = set()
+    st.session_state.marked_cells = {}  # {(row, col): "名前"}の辞書に変更
+if 'show_dialog' not in st.session_state:
+    st.session_state.show_dialog = False
+if 'selected_cell' not in st.session_state:
+    st.session_state.selected_cell = None
 
 def generate_bingo_card(items):
     """カスタム項目でビンゴカードを生成"""
@@ -80,7 +85,7 @@ def generate_bingo_card(items):
         card.append(row_items)
     
     # FREEを最初からマーク
-    st.session_state.marked_cells.add((2, 2))
+    st.session_state.marked_cells[(2, 2)] = "FREE"
     
     return card
 
@@ -108,34 +113,70 @@ def check_bingo(marked):
     
     return bingo_count
 
-def toggle_cell(row, col):
-    """セルのマーク状態を切り替え"""
-    if (row, col) in st.session_state.marked_cells:
-        st.session_state.marked_cells.remove((row, col))
-    else:
-        st.session_state.marked_cells.add((row, col))
-
 # 初回アクセス時に自動でカード生成
 if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
     st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
-    st.session_state.marked_cells = {(2, 2)}
+    st.session_state.marked_cells = {(2, 2): "FREE"}
 
 # タイトルとコントロール
 st.title("🎯 ビンゴカード")
 
-# コントロールボタン（コンパクトに配置）
+# コントロールボタン
 col1, col2 = st.columns(2)
 with col1:
     if st.button("🆕 新しいカード", use_container_width=True):
         st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
-        st.session_state.marked_cells = {(2, 2)}
+        st.session_state.marked_cells = {(2, 2): "FREE"}
+        st.session_state.show_dialog = False
+        st.session_state.selected_cell = None
         st.rerun()
 with col2:
     if st.button("🔄 リセット", use_container_width=True):
-        st.session_state.marked_cells = {(2, 2)}
+        st.session_state.marked_cells = {(2, 2): "FREE"}
+        st.session_state.show_dialog = False
+        st.session_state.selected_cell = None
         st.rerun()
 
 st.divider()
+
+# ダイアログ表示
+if st.session_state.show_dialog and st.session_state.selected_cell:
+    row, col = st.session_state.selected_cell
+    
+    @st.dialog("名前を入力してください")
+    def name_input_dialog():
+        item_name = st.session_state.bingo_card[row][col]
+        st.write(f"**項目:** {item_name}")
+        
+        name = st.text_input("お名前", key="name_input", placeholder="山田太郎")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("✅ 登録", use_container_width=True):
+                if name.strip():
+                    st.session_state.marked_cells[(row, col)] = name.strip()
+                    st.session_state.show_dialog = False
+                    st.session_state.selected_cell = None
+                    st.rerun()
+                else:
+                    st.warning("名前を入力してください")
+        
+        with col2:
+            if st.button("🗑️ 削除", use_container_width=True):
+                if (row, col) in st.session_state.marked_cells:
+                    del st.session_state.marked_cells[(row, col)]
+                st.session_state.show_dialog = False
+                st.session_state.selected_cell = None
+                st.rerun()
+        
+        with col3:
+            if st.button("❌ キャンセル", use_container_width=True):
+                st.session_state.show_dialog = False
+                st.session_state.selected_cell = None
+                st.rerun()
+    
+    name_input_dialog()
 
 # ビンゴカード表示
 if st.session_state.bingo_card is None:
@@ -156,7 +197,7 @@ else:
             is_marked = (row, col) in st.session_state.marked_cells
             
             with cols[col]:
-                # タッチして開く仕様
+                # FREEマス
                 if value == 'FREE':
                     st.button(
                         "⭐ FREE",
@@ -165,15 +206,19 @@ else:
                         use_container_width=True,
                         type="primary"
                     )
+                # マーク済みマス
                 elif is_marked:
+                    name = st.session_state.marked_cells[(row, col)]
                     if st.button(
-                        f"✅\n{value}",
+                        f"✅ {name}\n{value}",
                         key=f"cell_{row}_{col}",
                         use_container_width=True,
                         type="primary"
                     ):
-                        toggle_cell(row, col)
+                        st.session_state.show_dialog = True
+                        st.session_state.selected_cell = (row, col)
                         st.rerun()
+                # 未マークマス
                 else:
                     if st.button(
                         value,
@@ -181,7 +226,8 @@ else:
                         use_container_width=True,
                         type="secondary"
                     ):
-                        toggle_cell(row, col)
+                        st.session_state.show_dialog = True
+                        st.session_state.selected_cell = (row, col)
                         st.rerun()
     
     st.divider()
