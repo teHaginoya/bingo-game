@@ -77,7 +77,6 @@ st.markdown("""
        key="cell_*_*" のボタン
        ======================================== */
     .stButton:has(button[data-testid*="baseButton"]) {
-        width: 240px !important;
         padding: 2px !important;
         box-sizing: border-box !important;
     }
