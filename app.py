@@ -58,7 +58,7 @@ st.markdown("""
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
-        width: 20% !important;
+        width: 240px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         margin: 0 !important;
@@ -66,7 +66,7 @@ st.markdown("""
     
     /* ボタンのコンテナ */
     .element-container:has(.stButton) {
-        width: 20% !important;
+        width: 240px !important;
         padding: 0 !important;
         margin: 0 !important;
         box-sizing: border-box !important;
