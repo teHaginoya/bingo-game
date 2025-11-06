@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import time
 
 st.set_page_config(
     page_title="ビンゴゲーム", 
@@ -8,12 +9,13 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# カスタムCSS - UIを美しく
+# カスタムCSS - 水色背景とフリップアニメーション
 st.markdown("""
     <style>
-    /* 全体の背景をグラデーションに */
+    /* 水色のグラデーション背景 */
     .stApp {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
     }
     
     /* メインコンテンツエリア */
@@ -44,25 +46,46 @@ st.markdown("""
         line-height: 1.4;
         transition: all 0.3s ease;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transform-style: preserve-3d;
+        perspective: 1000px;
     }
     
     /* ボタンホバー効果 */
     .stButton button:hover {
-        transform: translateY(-2px);
+        transform: translateY(-2px) scale(1.02);
         box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    
+    /* フリップアニメーション */
+    @keyframes flip {
+        0% {
+            transform: rotateY(0deg);
+        }
+        50% {
+            transform: rotateY(90deg);
+        }
+        100% {
+            transform: rotateY(0deg);
+        }
+    }
+    
+    .flip-animation {
+        animation: flip 0.6s ease-in-out;
     }
     
     /* プライマリボタン（マーク済み） */
     .stButton button[kind="primary"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: 3px solid #FFD700;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #333;
+        border: 3px solid #FF6B6B;
+        font-weight: bold;
     }
     
     /* セカンダリボタン（未マーク） */
     .stButton button[kind="secondary"] {
         background: white;
         color: #333;
-        border: 2px solid #ddd;
+        border: 2px solid #B0E0E6;
     }
     
     /* コントロールボタン */
@@ -70,6 +93,14 @@ st.markdown("""
         height: 50px;
         font-size: 16px;
         border-radius: 25px;
+        background: white;
+        color: #0288D1;
+        border: 2px solid #4FC3F7;
+    }
+    
+    div[data-testid="column"]:has(.stButton) .stButton button:hover {
+        background: #E1F5FE;
+        transform: translateY(-2px);
     }
     
     /* メトリクスカード */
@@ -85,11 +116,12 @@ st.markdown("""
     }
     
     div[data-testid="metric-container"] {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.25);
         padding: 15px;
         border-radius: 15px;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
     /* 区切り線 */
@@ -102,35 +134,57 @@ st.markdown("""
     
     /* 成功メッセージ */
     .stSuccess {
-        background: rgba(40, 167, 69, 0.9);
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: white;
-        padding: 15px;
-        border-radius: 10px;
-        font-size: 18px;
+        padding: 20px;
+        border-radius: 15px;
+        font-size: 20px;
         font-weight: bold;
         text-align: center;
+        border: 3px solid #FF6B6B;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
     
     /* ダイアログのスタイル */
     [data-testid="stModal"] {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         border-radius: 20px;
+        border: 3px solid #4FC3F7;
     }
     
     /* テキスト入力 */
     .stTextInput input {
         border-radius: 10px;
-        border: 2px solid #667eea;
-        padding: 10px;
+        border: 2px solid #4FC3F7;
+        padding: 12px;
         font-size: 16px;
+    }
+    
+    .stTextInput input:focus {
+        border-color: #0288D1;
+        box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
     }
     
     /* エラーメッセージ */
     .stError {
-        background: rgba(220, 53, 69, 0.9);
+        background: rgba(244, 67, 54, 0.9);
         color: white;
         padding: 15px;
         border-radius: 10px;
+    }
+    
+    /* トップのビンゴ数表示 */
+    .bingo-count-display {
+        text-align: center;
+        color: white;
+        font-size: 20px;
+        margin-top: 8px;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        background: rgba(255, 215, 0, 0.3);
+        padding: 8px;
+        border-radius: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -172,6 +226,8 @@ if 'marked_cells' not in st.session_state:
     st.session_state.marked_cells = {}
 if 'selected_cell' not in st.session_state:
     st.session_state.selected_cell = None
+if 'flip_cell' not in st.session_state:
+    st.session_state.flip_cell = None
 
 def generate_bingo_card(items):
     """カスタム項目でビンゴカードを生成"""
@@ -231,19 +287,21 @@ with col1:
         st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
+        st.session_state.flip_cell = None
         st.rerun()
 
 with col2:
     if st.button("🔄 リセット", use_container_width=True):
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
+        st.session_state.flip_cell = None
         st.rerun()
 
 with col3:
     # 統計をここに表示
     if st.session_state.bingo_card:
         bingo_count = check_bingo(st.session_state.marked_cells)
-        st.markdown(f"<div style='text-align: center; color: white; font-size: 18px; margin-top: 10px;'>🏆 {bingo_count}ライン</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='bingo-count-display'>🏆 {bingo_count}ライン</div>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -266,6 +324,7 @@ def name_input_dialog(row, col):
             if name.strip():
                 st.session_state.marked_cells[(row, col)] = name.strip()
                 st.session_state.selected_cell = None
+                st.session_state.flip_cell = (row, col)  # フリップアニメーション用
                 st.rerun()
             else:
                 st.warning("名前を入力してください")
@@ -275,6 +334,7 @@ def name_input_dialog(row, col):
             if (row, col) in st.session_state.marked_cells:
                 del st.session_state.marked_cells[(row, col)]
             st.session_state.selected_cell = None
+            st.session_state.flip_cell = (row, col)  # フリップアニメーション用
             st.rerun()
     
     with col3:
@@ -285,6 +345,22 @@ def name_input_dialog(row, col):
 if st.session_state.selected_cell:
     row, col = st.session_state.selected_cell
     name_input_dialog(row, col)
+
+# フリップアニメーション用のJavaScript
+if st.session_state.flip_cell:
+    flip_row, flip_col = st.session_state.flip_cell
+    st.markdown(f"""
+        <script>
+        setTimeout(function() {{
+            const button = document.querySelector('[data-testid="baseButton-secondary"]:nth-of-type({flip_row * 5 + flip_col + 1})');
+            if (button) {{
+                button.classList.add('flip-animation');
+            }}
+        }}, 100);
+        </script>
+    """, unsafe_allow_html=True)
+    # アニメーション後にクリア
+    st.session_state.flip_cell = None
 
 # ビンゴカード表示
 if st.session_state.bingo_card is None:
