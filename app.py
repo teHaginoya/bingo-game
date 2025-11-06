@@ -158,8 +158,4 @@ else:
         st.metric("マーク", f"{len(st.session_state.marked_cells)}")
     with col3:
         st.metric("ビンゴ", bingo_count)
-```
-
-**② `requirements.txt`** (Add file → Create new file)
-```
-streamlit
+        
