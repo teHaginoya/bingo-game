@@ -12,384 +12,156 @@ st.set_page_config(
 
 # カスタムCSS - マスを大幅に小さく
 st.markdown("""
-    <style>
-    /* 水色のグラデーション背景 */
-    .stApp {
-        background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
-    }
-    
-    /* PC用のメインコンテンツエリア */
+<style>
+/* ====== 基本スタイル（PC基準）====== */
+
+/* 背景 */
+.stApp {
+    background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
+}
+
+/* メインコンテナ */
+.main .block-container {
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* タイトル */
+h1 {
+    color: white;
+    text-align: center;
+    font-size: 2rem !important;
+    margin: 0.5rem 0 !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 列（PC基準） */
+div[data-testid="column"] {
+    flex: 1 1 20%;
+    padding: 2px;
+}
+
+/* 行 */
+div[data-testid="stHorizontalBlock"] {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0px;
+}
+
+/* ボタン共通 */
+.stButton button {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    font-size: 0.75rem;
+    border-radius: 8px;
+    border: 2px solid #B0E0E6;
+    background: white;
+    color: #333;
+    padding: 4px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ホバー */
+.stButton button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* マーク済みボタン */
+.stButton button[kind="primary"] {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: 2px solid #FF6B6B;
+    color: #333;
+}
+
+/* コントロールエリア */
+.control-area {
+    margin-bottom: 1rem;
+}
+
+/* ビンゴ数表示 */
+.bingo-count-display {
+    text-align: center;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    background: rgba(255, 215, 0, 0.3);
+    padding: 12px 8px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ====== レスポンシブ対応 ====== */
+
+/* タブレット */
+@media (max-width: 1024px) {
     .main .block-container {
-        padding: 1rem;
-        max-width: 600px;
-        margin: 0 auto;
+        max-width: 420px !important;
     }
-    
-    /* タイトルスタイル */
+    .stButton button {
+        font-size: 0.6rem;
+    }
+}
+
+/* スマホ */
+@media (max-width: 768px) {
+    .main .block-container {
+        padding: 0.5rem !important;
+        max-width: 360px !important;
+    }
     h1 {
-        color: white;
-        text-align: center;
-        font-size: 2rem !important;
-        margin: 0.5rem 0 !important;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        font-size: 1.2rem !important;
     }
-    
-    /* 列を強制的に横並びに */
     div[data-testid="column"] {
-        width: 20% !important;
-        flex: 0 0 20% !important;
-        min-width: 0 !important;
-        max-width: 20% !important;
+        flex: 1 1 20% !important;
+        padding: 1px !important;
+    }
+    .stButton button {
+        font-size: 0.5rem !important;
+        border-radius: 4px !important;
         padding: 2px !important;
     }
-    
-    /* 行を横並びに固定 */
-    div[data-testid="stHorizontalBlock"] {
-        gap: 0px !important;
-        flex-wrap: nowrap !important;
-        display: flex !important;
+}
+
+/* 小型スマホ */
+@media (max-width: 480px) {
+    .main .block-container {
+        max-width: 320px !important;
+        padding: 0.3rem !important;
     }
-    
-    /* ボタンを正方形に */
+    h1 {
+        font-size: 1rem !important;
+    }
+    div[data-testid="column"] {
+        flex: 1 1 20% !important;
+        padding: 0.5px !important;
+    }
     .stButton button {
-        width: 50px !important;
-        aspect-ratio: 1 / 1 !important;
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: 120px !important;
-        font-size: 0.75rem;
-        font-weight: bold;
-        border-radius: 8px;
-        white-space: normal;
-        word-wrap: break-word;
-        line-height: 1.2;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        padding: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 0.4rem !important;
+        border-radius: 2px !important;
+        padding: 1px !important;
     }
-    
-    /* ボタンホバー効果 */
-    .stButton button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 極小画面（例: iPhone SEなど） */
+@media (max-width: 375px) {
+    .main .block-container {
+        max-width: 280px !important;
     }
-    
-    /* プライマリボタン（マーク済み） */
-    .stButton button[kind="primary"] {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: #333;
-        border: 2px solid #FF6B6B;
-        font-weight: bold;
+    .stButton button {
+        font-size: 0.35rem !important;
     }
-    
-    /* セカンダリボタン（未マーク） */
-    .stButton button[kind="secondary"] {
-        background: white;
-        color: #333;
-        border: 2px solid #B0E0E6;
-    }
-    
-    /* コントロールエリア全体 */
-    .control-area {
-        margin-bottom: 1rem;
-    }
-    
-    /* コントロールボタンエリアの列 */
-    .control-area div[data-testid="column"] {
-        width: 33.333% !important;
-        flex: 0 0 33.333% !important;
-        max-width: 33.333% !important;
-    }
-    
-    /* コントロールボタン - トロフィーと同じ高さ */
-    .control-area .stButton button {
-        aspect-ratio: auto !important;
-        height: 25px !important;
-        min-height: 50px !important;
-        max-height: 50px !important;
-        font-size: 0.9rem;
-        border-radius: 10px;
-        background: white;
-        color: #0288D1;
-        border: 2px solid #4FC3F7;
-    }
-    
-    /* ビンゴ数表示 */
-    .bingo-count-display {
-        text-align: center;
-        color: white;
-        font-size: 1.1rem;
-        font-weight: bold;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        background: rgba(255, 215, 0, 0.3);
-        padding: 12px 8px;
-        border-radius: 10px;
-        border: 2px solid rga(255, 255, 255, 0.5);
-        height: 50px;b
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* メトリクスカード */
-    [data-testid="stMetricValue"] {
-        font-size: 1.5rem;
-        color: white;
-        font-weight: bold;
-    }
-    
-    [data-testid="stMetricLabel"] {
-        color: white !important;
-        font-size: 0.9rem;
-    }
-    
-    div[data-testid="metric-container"] {
-        background: rgba(255, 255, 255, 0.25);
-        padding: 12px;
-        border-radius: 12px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    /* 区切り線 */
-    hr {
-        margin: 0.8rem 0;
-        border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-    }
-    
-    /* 成功メッセージ */
-    .stSuccess {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: white;
-        padding: 12px;
-        border-radius: 12px;
-        font-size: 1rem;
-        font-weight: bold;
-        text-align: center;
-        border: 2px solid #FF6B6B;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        margin: 0.8rem 0;
-    }
-    
-    /* ダイアログのスタイル */
-    [data-testid="stModal"] {
-        background: rgba(255, 255, 255, 0.98);
-        border-radius: 20px;
-        border: 3px solid #4FC3F7;
-    }
-    
-    /* テキスト入力 */
-    .stTextInput input {
-        border-radius: 10px;
-        border: 2px solid #4FC3F7;
-        padding: 12px;
-        font-size: 16px;
-    }
-    
-    .stTextInput input:focus {
-        border-color: #0288D1;
-        box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
-    }
-    
-    /* エラーメッセージ */
-    .stError {
-        background: rgba(244, 67, 54, 0.9);
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-        font-size: 1rem;
-    }
-    
-    /* タブレット用の調整 */
-    @media (max-width: 1024px) and (min-width: 769px) {
-        .main .block-container {
-            max-width: 400px;
-        }
-        
-        .stButton button {
-            font-size: 0.6rem;
-            max-height: 80px !important;
-        }
-        
-        h1 {
-            font-size: 1.5rem !important;
-        }
-    }
-    
-    /* スマホ用の調整 - マスを極小に */
-    @media (max-width: 768px) {
-        html, body, .stApp {
-            width: 100vw !important;
-            overflow-x: hidden !important;
-        }
-        
-        /* コンテナを中央に配置して幅を制限 */
-        .main .block-container {
-            padding: 0.5rem !important;
-            max-width: 350px !important;
-            width: 100% !important;
-            margin: 0 auto !important;
-        }
-        
-        h1 {
-            font-size: 1.2rem !important;
-            margin: 0.2rem 0 !important;
-        }
-        
-        .control-area {
-            margin-bottom: 0.4rem;
-        }
-        
-        .control-area div[data-testid="column"] {
-            width: 33.333% !important;
-            flex: 0 0 33.333% !important;
-            max-width: 33.333% !important;
-            padding: 2px !important;
-        }
-        
-        .control-area .stButton button {
-            height: 32px !important;
-            min-height: 32px !important;
-            max-height: 32px !important;
-            font-size: 0.75rem !important;
-            border-radius: 6px !important;
-        }
-        
-        .bingo-count-display {
-            font-size: 0.8rem !important;
-            padding: 6px 4px !important;
-            height: 32px !important;
-            border-radius: 6px !important;
-        }
-        
-        hr {
-            margin: 0.3rem 0 !important;
-        }
-        
-        .stSuccess {
-            padding: 6px !important;
-            font-size: 0.75rem !important;
-            margin: 0.3rem 0 !important;
-        }
-        
-        /* ビンゴカードエリア - マスを極小に！ */
-        div[data-testid="column"] {
-            width: 20% !important;
-            flex: 0 0 20% !important;
-            max-width: 20% !important;
-            padding: 1px !important;
-        }
-        
-        /* ビンゴカードのボタン - 大幅に小さく */
-        .stButton button {
-            font-size: 0.4rem !important;
-            border-radius: 3px !important;
-            border-width: 1px !important;
-            padding: 1px !important;
-            max-height: 55px !important;
-            line-height: 1 !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.95rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.65rem !important;
-        }
-        
-        div[data-testid="metric-container"] {
-            padding: 6px !important;
-        }
-    }
-    
-    /* 小型スマホ - マスをさらに極小に */
-    @media (max-width: 480px) {
-        .main .block-container {
-            padding: 0.4rem !important;
-            max-width: 320px !important;
-        }
-        
-        h1 {
-            font-size: 1rem !important;
-            margin: 0.15rem 0 !important;
-        }
-        
-        .control-area .stButton button {
-            height: 28px !important;
-            min-height: 28px !important;
-            max-height: 28px !important;
-            font-size: 0.7rem !important;
-        }
-        
-        .bingo-count-display {
-            font-size: 0.75rem !important;
-            height: 28px !important;
-        }
-        
-        /* マスを極小に */
-        .stButton button {
-            font-size: 0.38rem !important;
-            border-radius: 2px !important;
-            max-height: 50px !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.85rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.6rem !important;
-        }
-    }
-    
-    /* 非常に小さい画面 - マスを最小限に */
-    @media (max-width: 375px) {
-        .main .block-container {
-            padding: 0.3rem !important;
-            max-width: 280px !important;
-        }
-        
-        h1 {
-            font-size: 0.9rem !important;
-        }
-        
-        .control-area .stButton button {
-            height: 26px !important;
-            min-height: 26px !important;
-            max-height: 26px !important;
-            font-size: 0.65rem !important;
-        }
-        
-        .bingo-count-display {
-            font-size: 0.7rem !important;
-            height: 26px !important;
-        }
-        
-        /* マスを最小サイズに */
-        .stButton button {
-            font-size: 0.35rem !important;
-            border-radius: 2px !important;
-            max-height: 45px !important;
-            padding: 0.5px !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.8rem !important;
-        }
-        
-        div[data-testid="column"] {
-            padding: 0.5px !important;
-        }
-    }
-    </style>
-    """, unsafe_allow_html=True)
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 # ===== ここに項目リストを追加してください =====
 ITEM_LIST = [
