@@ -34,7 +34,7 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-/* ====== ビンゴカードの行 ====== */
+/* ====== ビンゴカード行 ====== */
 div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -42,7 +42,7 @@ div[data-testid="stHorizontalBlock"] {
     gap: 4px;
 }
 
-/* ====== 各マスの列 ====== */
+/* ====== ビンゴカードの列 ====== */
 div[data-testid="column"] {
     flex: 0 0 calc(20% - 4px);
     padding: 2px !important;
@@ -68,20 +68,17 @@ div[data-testid="column"] {
     justify-content: center;
 }
 
-/* ホバー時 */
 .bingo-card .stButton button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* マーク済み */
 .bingo-card .stButton button[kind="primary"] {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     border: 2px solid #FF6B6B;
     color: #333;
 }
 
-/* 未マーク */
 .bingo-card .stButton button[kind="secondary"] {
     background: white;
     color: #333;
@@ -252,7 +249,7 @@ if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
 st.title("🎯 ビンゴカード")
 
 # コントロールエリア
-st.markdown('<div class="control-area">', unsafe_allow_html=True)
+st.markdown('<div class="control-buttons">', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("🆕 新規", use_container_width=True):
@@ -341,6 +338,8 @@ else:
         st.success(f"❄️❄️❄️ 完璧です！{bingo_count}ライン達成！ ❄️❄️❄️")
     
     # ビンゴカード表示（5x5グリッド）
+    st.markdown('<div class="bingo-card">', unsafe_allow_html=True)
+    
     for row in range(5):
         cols = st.columns(5)
         for col in range(5):
@@ -376,6 +375,7 @@ else:
                     ):
                         st.session_state.selected_cell = (row, col)
                         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
     
     st.divider()
     
