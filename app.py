@@ -5,11 +5,11 @@ import time
 st.set_page_config(
     page_title="ビンゴゲーム", 
     page_icon="🎯", 
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# カスタムCSS - スマホ全画面対応
+# カスタムCSS - デバイス別最適化
 st.markdown("""
     <style>
     /* 水色のグラデーション背景 */
@@ -17,27 +17,28 @@ st.markdown("""
         background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
     }
     
-    /* メインコンテンツエリア */
+    /* PC用のメインコンテンツエリア */
     .main .block-container {
-        padding: 0.5rem 0.5rem;
-        max-width: 100%;
+        padding: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
     }
     
     /* タイトルスタイル */
     h1 {
         color: white;
         text-align: center;
-        font-size: 1.5rem !important;
-        margin: 0.3rem 0 !important;
+        font-size: 2rem !important;
+        margin: 0.5rem 0 !important;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
-    /* 列を強制的に横並びに - 最重要！ */
+    /* 列を強制的に横並びに */
     div[data-testid="column"] {
         width: 20% !important;
         flex: 1 1 20% !important;
         min-width: 0 !important;
-        padding: 1px !important;
+        padding: 2px !important;
     }
     
     /* 行を横並びに固定 */
@@ -51,18 +52,24 @@ st.markdown("""
         width: 100%;
         aspect-ratio: 1 / 1;
         height: auto !important;
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         font-weight: bold;
         border-radius: 8px;
         white-space: normal;
         word-wrap: break-word;
-        line-height: 1.1;
+        line-height: 1.2;
         transition: all 0.2s ease;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        padding: 2px;
+        padding: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    /* ボタンホバー効果 */
+    .stButton button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     
     /* プライマリボタン（マーク済み） */
@@ -89,9 +96,9 @@ st.markdown("""
     /* コントロールボタン */
     .main > div:first-child .stButton button {
         aspect-ratio: auto !important;
-        height: 40px !important;
-        font-size: 0.9rem;
-        border-radius: 20px;
+        height: 45px !important;
+        font-size: 1rem;
+        border-radius: 22px;
         background: white;
         color: #0288D1;
         border: 2px solid #4FC3F7;
@@ -99,28 +106,28 @@ st.markdown("""
     
     /* メトリクスカード */
     [data-testid="stMetricValue"] {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         color: white;
         font-weight: bold;
     }
     
     [data-testid="stMetricLabel"] {
         color: white !important;
-        font-size: 0.75rem;
+        font-size: 0.9rem;
     }
     
     div[data-testid="metric-container"] {
         background: rgba(255, 255, 255, 0.25);
-        padding: 8px;
-        border-radius: 10px;
+        padding: 12px;
+        border-radius: 12px;
         backdrop-filter: blur(10px);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
     /* 区切り線 */
     hr {
-        margin: 0.5rem 0;
+        margin: 1rem 0;
         border: none;
         height: 2px;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
@@ -130,14 +137,14 @@ st.markdown("""
     .stSuccess {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: white;
-        padding: 10px;
-        border-radius: 10px;
-        font-size: 1rem;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 1.1rem;
         font-weight: bold;
         text-align: center;
         border: 2px solid #FF6B6B;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        margin: 0.5rem 0;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        margin: 1rem 0;
     }
     
     /* ダイアログのスタイル */
@@ -164,39 +171,110 @@ st.markdown("""
     .stError {
         background: rgba(244, 67, 54, 0.9);
         color: white;
-        padding: 10px;
+        padding: 15px;
         border-radius: 10px;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
     
     /* トップのビンゴ数表示 */
     .bingo-count-display {
         text-align: center;
         color: white;
-        font-size: 1rem;
-        margin-top: 5px;
+        font-size: 1.1rem;
+        margin-top: 8px;
         font-weight: bold;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         background: rgba(255, 215, 0, 0.3);
-        padding: 5px;
-        border-radius: 15px;
+        padding: 8px;
+        border-radius: 18px;
         border: 2px solid rgba(255, 255, 255, 0.5);
     }
     
-    /* スマホ最適化 */
+    /* タブレット用の調整 */
+    @media (max-width: 1024px) and (min-width: 769px) {
+        .main .block-container {
+            max-width: 500px;
+        }
+        
+        .stButton button {
+            font-size: 0.7rem;
+        }
+        
+        h1 {
+            font-size: 1.8rem !important;
+        }
+    }
+    
+    /* スマホ用の調整 */
     @media (max-width: 768px) {
+        .main .block-container {
+            padding: 0.5rem;
+            max-width: 100%;
+        }
+        
         .stButton button {
             font-size: 0.6rem;
             border-radius: 6px;
             border-width: 1.5px;
+            padding: 2px;
         }
         
         h1 {
-            font-size: 1.3rem !important;
+            font-size: 1.4rem !important;
+            margin: 0.3rem 0 !important;
         }
         
         .main > div:first-child .stButton button {
-            height: 36px !important;
+            height: 38px !important;
+            font-size: 0.9rem;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 1.2rem;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.75rem;
+        }
+        
+        div[data-testid="metric-container"] {
+            padding: 8px;
+        }
+        
+        .stSuccess {
+            padding: 10px;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+        }
+        
+        .bingo-count-display {
+            font-size: 0.95rem;
+            padding: 6px;
+        }
+        
+        hr {
+            margin: 0.5rem 0;
+        }
+    }
+    
+    /* さらに小さい画面用 */
+    @media (max-width: 480px) {
+        .main .block-container {
+            padding: 0.3rem;
+        }
+        
+        .stButton button {
+            font-size: 0.55rem;
+            border-radius: 5px;
+            padding: 1px;
+        }
+        
+        h1 {
+            font-size: 1.2rem !important;
+        }
+        
+        .main > div:first-child .stButton button {
+            height: 34px !important;
             font-size: 0.85rem;
         }
         
@@ -206,23 +284,6 @@ st.markdown("""
         
         [data-testid="stMetricLabel"] {
             font-size: 0.7rem;
-        }
-    }
-    
-    /* さらに小さい画面用 */
-    @media (max-width: 480px) {
-        .stButton button {
-            font-size: 0.55rem;
-            border-radius: 5px;
-        }
-        
-        h1 {
-            font-size: 1.1rem !important;
-        }
-        
-        .main > div:first-child .stButton button {
-            height: 32px !important;
-            font-size: 0.8rem;
         }
     }
     </style>
