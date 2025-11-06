@@ -10,13 +10,12 @@ st.set_page_config(
     menu_items=None
 )
 
-# カスタムCSS - 完全なスマホ対応
+# カスタムCSS - 画面全体を基準に
 st.markdown("""
     <style>
     /* 水色のグラデーション背景 */
     .stApp {
         background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
-        overflow-x: hidden;
     }
     
     /* PC用のメインコンテンツエリア */
@@ -35,7 +34,7 @@ st.markdown("""
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
-    /* 列を強制的に横並びに - 重要！ */
+    /* 列を強制的に横並びに */
     div[data-testid="column"] {
         width: 20% !important;
         flex: 0 0 20% !important;
@@ -44,7 +43,7 @@ st.markdown("""
         padding: 2px !important;
     }
     
-    /* 行を横並びに固定 - 重要！ */
+    /* 行を横並びに固定 */
     div[data-testid="stHorizontalBlock"] {
         gap: 0px !important;
         flex-wrap: nowrap !important;
@@ -220,144 +219,158 @@ st.markdown("""
         }
     }
     
-    /* スマホ用の調整 - 全体が見えるように完全修正 */
+    /* スマホ用の調整 - 画面サイズを基準に */
     @media (max-width: 768px) {
-        /* ビューポート全体を使用 */
+        /* 画面全体を基準に */
+        html, body, .stApp {
+            width: 100vw !important;
+            overflow-x: hidden !important;
+        }
+        
         .main .block-container {
-            padding: 0.3rem 0.2rem !important;
+            padding: 0.5rem !important;
             max-width: 100vw !important;
             width: 100% !important;
         }
         
-        /* 列の幅を厳密に制御 */
+        /* タイトルを小さく */
+        h1 {
+            font-size: 1.3rem !important;
+            margin: 0.3rem 0 !important;
+        }
+        
+        /* コントロールエリア */
+        .control-area {
+            margin-bottom: 0.5rem;
+        }
+        
+        .control-area div[data-testid="column"] {
+            width: 33.333% !important;
+            flex: 0 0 33.333% !important;
+            max-width: 33.333% !important;
+            padding: 2px !important;
+        }
+        
+        .control-area .stButton button {
+            height: 36px !important;
+            min-height: 36px !important;
+            font-size: 0.8rem !important;
+            border-radius: 8px !important;
+        }
+        
+        .bingo-count-display {
+            font-size: 0.9rem !important;
+            padding: 8px 4px !important;
+            height: 36px !important;
+            border-radius: 8px !important;
+        }
+        
+        /* 区切り線を小さく */
+        hr {
+            margin: 0.4rem 0 !important;
+        }
+        
+        /* 成功メッセージを小さく */
+        .stSuccess {
+            padding: 8px !important;
+            font-size: 0.85rem !important;
+            margin: 0.5rem 0 !important;
+        }
+        
+        /* ビンゴカードエリアの列 */
         div[data-testid="column"] {
             width: 20% !important;
             flex: 0 0 20% !important;
-            min-width: 0 !important;
             max-width: 20% !important;
-            padding: 1px !important;
+            padding: 1.5px !important;
         }
         
         /* ビンゴカードのボタン */
         .stButton button {
-            font-size: 0.5rem !important;
-            border-radius: 4px !important;
-            border-width: 1px !important;
-            padding: 1px !important;
-            line-height: 1.1 !important;
+            font-size: 0.6rem !important;
+            border-radius: 5px !important;
+            border-width: 1.5px !important;
+            padding: 2px !important;
         }
         
-        /* タイトル */
+        /* メトリクス */
+        [data-testid="stMetricValue"] {
+            font-size: 1.1rem !important;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.7rem !important;
+        }
+        
+        div[data-testid="metric-container"] {
+            padding: 8px !important;
+        }
+    }
+    
+    /* 小型スマホ */
+    @media (max-width: 480px) {
+        .main .block-container {
+            padding: 0.4rem !important;
+        }
+        
         h1 {
             font-size: 1.1rem !important;
             margin: 0.2rem 0 !important;
         }
         
-        /* コントロールエリア */
-        .control-area div[data-testid="column"] {
-            width: 33.333% !important;
-            flex: 0 0 33.333% !important;
-            max-width: 33.333% !important;
-            padding: 1px !important;
-        }
-        
-        /* コントロールボタン */
         .control-area .stButton button {
-            height: 38px !important;
-            min-height: 38px !important;
+            height: 32px !important;
+            min-height: 32px !important;
             font-size: 0.75rem !important;
-            border-radius: 8px !important;
         }
         
-        /* ビンゴ数表示 */
         .bingo-count-display {
-            font-size: 0.85rem !important;
-            padding: 8px 4px !important;
-            height: 38px !important;
-            border-radius: 8px !important;
+            font-size: 0.8rem !important;
+            height: 32px !important;
         }
         
-        /* メトリクス */
+        .stButton button {
+            font-size: 0.55rem !important;
+            border-radius: 4px !important;
+        }
+        
         [data-testid="stMetricValue"] {
-            font-size: 0.95rem !important;
+            font-size: 1rem !important;
         }
         
         [data-testid="stMetricLabel"] {
             font-size: 0.65rem !important;
-        }
-        
-        div[data-testid="metric-container"] {
-            padding: 6px !important;
-        }
-        
-        /* 成功メッセージ */
-        .stSuccess {
-            padding: 8px !important;
-            font-size: 0.8rem !important;
-            margin: 0.4rem 0 !important;
-        }
-        
-        /* 区切り線 */
-        hr {
-            margin: 0.3rem 0 !important;
-        }
-    }
-    
-    /* さらに小さい画面用 */
-    @media (max-width: 480px) {
-        .main .block-container {
-            padding: 0.2rem 0.1rem !important;
-        }
-        
-        .stButton button {
-            font-size: 0.45rem !important;
-            border-radius: 3px !important;
-        }
-        
-        h1 {
-            font-size: 0.95rem !important;
-            margin: 0.1rem 0 !important;
-        }
-        
-        .control-area .stButton button {
-            height: 34px !important;
-            min-height: 34px !important;
-            font-size: 0.7rem !important;
-        }
-        
-        .bingo-count-display {
-            font-size: 0.75rem !important;
-            height: 34px !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.85rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.6rem !important;
         }
     }
     
     /* 非常に小さい画面 */
     @media (max-width: 375px) {
-        .stButton button {
-            font-size: 0.4rem !important;
+        .main .block-container {
+            padding: 0.3rem !important;
         }
         
         h1 {
-            font-size: 0.85rem !important;
+            font-size: 1rem !important;
         }
         
         .control-area .stButton button {
-            height: 30px !important;
-            min-height: 30px !important;
-            font-size: 0.65rem !important;
+            height: 28px !important;
+            min-height: 28px !important;
+            font-size: 0.7rem !important;
         }
         
         .bingo-count-display {
-            font-size: 0.7rem !important;
-            height: 30px !important;
+            font-size: 0.75rem !important;
+            height: 28px !important;
+        }
+        
+        .stButton button {
+            font-size: 0.5rem !important;
+            border-radius: 3px !important;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 0.9rem !important;
         }
     }
     </style>
