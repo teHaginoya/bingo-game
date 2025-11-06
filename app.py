@@ -41,7 +41,7 @@ st.markdown("""
         padding-bottom: 1rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-        max-width: 100%;
+        max-width: 20%;
     }
     
     /* カラムコンテナの設定 - 5つ並ぶように */
@@ -58,7 +58,7 @@ st.markdown("""
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
-        width: 100% !important;
+        width: 20% !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         margin: 0 !important;
