@@ -58,8 +58,6 @@ if 'bingo_card' not in st.session_state:
     st.session_state.bingo_card = None
 if 'marked_cells' not in st.session_state:
     st.session_state.marked_cells = {}  # {(row, col): "名前"}の辞書
-if 'show_dialog' not in st.session_state:
-    st.session_state.show_dialog = False
 if 'selected_cell' not in st.session_state:
     st.session_state.selected_cell = None
 
@@ -127,59 +125,54 @@ with col1:
     if st.button("🆕 新しいカード", use_container_width=True):
         st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
         st.session_state.marked_cells = {(2, 2): "FREE"}
-        st.session_state.show_dialog = False
         st.session_state.selected_cell = None
         st.rerun()
 with col2:
     if st.button("🔄 リセット", use_container_width=True):
         st.session_state.marked_cells = {(2, 2): "FREE"}
-        st.session_state.show_dialog = False
         st.session_state.selected_cell = None
         st.rerun()
 
 st.divider()
 
-# ダイアログ表示
-if st.session_state.show_dialog and st.session_state.selected_cell:
+# ダイアログ表示（修正版）
+@st.dialog("名前を入力してください")
+def name_input_dialog(row, col):
+    item_name = st.session_state.bingo_card[row][col]
+    st.write(f"**項目:** {item_name}")
+    
+    # 既存の名前があれば表示
+    current_name = st.session_state.marked_cells.get((row, col), "")
+    
+    name = st.text_input("お名前", value=current_name, key=f"name_input_{row}_{col}", placeholder="山田太郎")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("✅ 登録", use_container_width=True, key=f"register_{row}_{col}"):
+            if name.strip():
+                st.session_state.marked_cells[(row, col)] = name.strip()
+                st.session_state.selected_cell = None
+                st.rerun()
+            else:
+                st.warning("名前を入力してください")
+    
+    with col2:
+        if st.button("🗑️ 削除", use_container_width=True, key=f"delete_{row}_{col}"):
+            if (row, col) in st.session_state.marked_cells:
+                del st.session_state.marked_cells[(row, col)]
+            st.session_state.selected_cell = None
+            st.rerun()
+    
+    with col3:
+        if st.button("❌ キャンセル", use_container_width=True, key=f"cancel_{row}_{col}"):
+            st.session_state.selected_cell = None
+            st.rerun()
+
+# 選択されたセルがある場合、ダイアログを表示
+if st.session_state.selected_cell:
     row, col = st.session_state.selected_cell
-    
-    @st.dialog("名前を入力してください")
-    def name_input_dialog():
-        item_name = st.session_state.bingo_card[row][col]
-        st.write(f"**項目:** {item_name}")
-        
-        # 既存の名前があれば表示
-        current_name = st.session_state.marked_cells.get((row, col), "")
-        
-        name = st.text_input("お名前", value=current_name, key="name_input", placeholder="山田太郎")
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            if st.button("✅ 登録", use_container_width=True):
-                if name.strip():
-                    st.session_state.marked_cells[(row, col)] = name.strip()
-                    st.session_state.show_dialog = False
-                    st.session_state.selected_cell = None
-                    st.rerun()
-                else:
-                    st.warning("名前を入力してください")
-        
-        with col2:
-            if st.button("🗑️ 削除", use_container_width=True):
-                if (row, col) in st.session_state.marked_cells:
-                    del st.session_state.marked_cells[(row, col)]
-                st.session_state.show_dialog = False
-                st.session_state.selected_cell = None
-                st.rerun()
-        
-        with col3:
-            if st.button("❌ キャンセル", use_container_width=True):
-                st.session_state.show_dialog = False
-                st.session_state.selected_cell = None
-                st.rerun()
-    
-    name_input_dialog()
+    name_input_dialog(row, col)
 
 # ビンゴカード表示
 if st.session_state.bingo_card is None:
@@ -220,7 +213,6 @@ else:
                         use_container_width=True,
                         type="primary"
                     ):
-                        st.session_state.show_dialog = True
                         st.session_state.selected_cell = (row, col)
                         st.rerun()
                 # 未マークマス
@@ -231,7 +223,6 @@ else:
                         use_container_width=True,
                         type="secondary"
                     ):
-                        st.session_state.show_dialog = True
                         st.session_state.selected_cell = (row, col)
                         st.rerun()
     
