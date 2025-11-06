@@ -34,15 +34,6 @@ st.markdown("""
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
-    /* 列を強制的に横並びに */
-    div[data-testid="column"] {
-        width: 20% !important;
-        flex: 0 0 20% !important;
-        min-width: 0 !important;
-        max-width: 20% !important;
-        padding: 2px !important;
-    }
-    
     /* 行を横並びに固定 */
     div[data-testid="stHorizontalBlock"] {
         gap: 0px !important;
@@ -114,6 +105,15 @@ st.markdown("""
     /* ビンゴカードエリア */
     .bingo-card-area {
         margin-top: 1rem;
+    }
+    
+    /* ビンゴカードエリアの列設定 - 5x5グリッド */
+    .bingo-card-area div[data-testid="column"] {
+        width: 20% !important;
+        flex: 0 0 20% !important;
+        min-width: 0 !important;
+        max-width: 20% !important;
+        padding: 2px !important;
     }
     
     /* ビンゴカードのマス専用スタイル */
@@ -301,7 +301,7 @@ st.markdown("""
         }
         
         /* ビンゴカードエリア - スマホ */
-        div[data-testid="column"] {
+        .bingo-card-area div[data-testid="column"] {
             width: 20% !important;
             flex: 0 0 20% !important;
             max-width: 20% !important;
@@ -413,7 +413,7 @@ st.markdown("""
             font-size: 0.8rem !important;
         }
         
-        div[data-testid="column"] {
+        .bingo-card-area div[data-testid="column"] {
             padding: 0.5px !important;
         }
     }
