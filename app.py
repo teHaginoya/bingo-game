@@ -60,7 +60,7 @@ st.markdown("""
     
     /* Streamlitのボタンを正方形にするスタイル */
     .stButton > button {
-        width: 100% !important;
+        width: 20% !important;
         aspect-ratio: 1 !important;
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
