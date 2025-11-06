@@ -46,9 +46,9 @@ st.markdown("""
     
     /* カラムコンテナの設定 - 5つ並ぶように */
     [data-testid="column"] {
-        width: 20% !important;
+        width: 240px !important;
         flex: 0 0 20% !important;
-        max-width: 20% !important;
+        max-width: 240px !important;
         min-width: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
