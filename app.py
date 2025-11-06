@@ -9,12 +9,23 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# ビンゴカードに表示するアイテムのリスト
+# ここを自由に変更してください
+BINGO_ITEMS = [
+    "リンゴ", "バナナ", "イチゴ", "ブドウ", "メロン",
+    "スイカ", "桃", "梨", "柿", "みかん",
+    "キウイ", "マンゴー", "パイナップル", "レモン", "オレンジ",
+    "さくらんぼ", "プラム", "アボカド", "パパイヤ", "グァバ",
+    "ライチ", "ドラゴンフルーツ", "パッションフルーツ", "ザクロ", "いちじく"
+]
+
 # カスタムCSS - スマホ最適化
 st.markdown("""
 <style>
     /* メインコンテナの調整 */
     .main {
         padding: 0.5rem;
+        max-width: 600px;
     }
     
     /* タイトルのスタイル */
@@ -24,61 +35,78 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    /* ビンゴカードのコンテナ */
-    .bingo-container {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 4px;
-        max-width: 100%;
-        margin: 0 auto;
-        aspect-ratio: 1;
-    }
-    
-    /* ビンゴのマス */
-    .bingo-cell {
-        aspect-ratio: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #333;
-        border-radius: 8px;
-        font-size: clamp(1rem, 4vw, 1.5rem);
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        user-select: none;
-    }
-    
-    .bingo-cell.unchecked {
-        background-color: #ffffff;
-        color: #333;
-    }
-    
-    .bingo-cell.checked {
-        background-color: #ff6b6b;
-        color: white;
-    }
-    
-    .bingo-cell.free {
-        background-color: #4ecdc4;
-        color: white;
-    }
-    
-    /* ボタンのスタイル */
-    .stButton > button {
+    /* ビンゴカード全体のコンテナ */
+    .bingo-grid-container {
         width: 100%;
-        background-color: #4CAF50;
-        color: white;
-        font-size: 1.1rem;
-        padding: 0.75rem;
-        border-radius: 8px;
-        border: none;
-        margin-top: 1rem;
+        max-width: 500px;
+        margin: 0 auto;
     }
     
-    /* Streamlitのデフォルトスタイルを上書き */
+    /* Streamlitのボタンを正方形にするスタイル */
+    .stButton > button {
+        width: 100% !important;
+        aspect-ratio: 1 !important;
+        padding: 0 !important;
+        height: auto !important;
+        min-height: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: clamp(0.7rem, 2.5vw, 0.9rem) !important;
+        font-weight: bold !important;
+        border-radius: 8px !important;
+        border: 2px solid #333 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.2 !important;
+    }
+    
+    /* チェック済みボタン（primary） */
+    .stButton > button[kind="primary"] {
+        background-color: #ff6b6b !important;
+        color: white !important;
+        border-color: #ff6b6b !important;
+    }
+    
+    /* 未チェックボタン（secondary） */
+    .stButton > button[kind="secondary"] {
+        background-color: #ffffff !important;
+        color: #333 !important;
+        border-color: #333 !important;
+    }
+    
+    /* FREEマス */
+    .stButton > button:disabled {
+        background-color: #4ecdc4 !important;
+        color: white !important;
+        border-color: #4ecdc4 !important;
+        opacity: 1 !important;
+    }
+    
+    /* 新規生成ボタン */
+    div[data-testid="column"] > div > div > div > button {
+        background-color: #4CAF50 !important;
+        color: white !important;
+        font-size: 1.1rem !important;
+        padding: 0.75rem !important;
+        border-radius: 8px !important;
+        margin-top: 1rem !important;
+        aspect-ratio: auto !important;
+        height: auto !important;
+    }
+    
+    /* カラムの間隔調整 */
+    div[data-testid="column"] {
+        padding: 2px !important;
+    }
+    
+    /* Streamlitのデフォルト余白を削除 */
     .element-container {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0 !important;
+    }
+    
+    .row-widget {
+        margin-bottom: 0 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -89,16 +117,28 @@ if 'bingo_card' not in st.session_state:
     st.session_state.checked = None
 
 def generate_bingo_card():
-    """1-75のランダムな数字でビンゴカードを生成"""
-    card = []
-    for _ in range(5):
-        row = []
-        for _ in range(5):
-            row.append(random.randint(1, 75))
-        card.append(row)
+    """リストからランダムに選んでビンゴカードを生成"""
+    # 25マス分必要なので、リストをシャッフルして使用
+    if len(BINGO_ITEMS) < 24:  # 24個（中央はFREE）
+        # アイテムが足りない場合は重複を許可
+        selected_items = random.choices(BINGO_ITEMS, k=24)
+    else:
+        # アイテムが十分ある場合は重複なしで選択
+        selected_items = random.sample(BINGO_ITEMS, 24)
     
-    # 中央をフリースペースに
-    card[2][2] = "FREE"
+    card = []
+    item_index = 0
+    
+    for row in range(5):
+        row_data = []
+        for col in range(5):
+            if row == 2 and col == 2:
+                # 中央はフリースペース
+                row_data.append("FREE")
+            else:
+                row_data.append(selected_items[item_index])
+                item_index += 1
+        card.append(row_data)
     
     return card
 
@@ -187,13 +227,14 @@ st.markdown("---")
 if bingo_count > 0:
     st.success(f"🎉 {bingo_count}つのビンゴが揃いました！")
 else:
-    st.info("💡 数字をタップしてマークしましょう！")
+    st.info("💡 アイテムをタップしてマークしましょう！")
 
 # 使い方の説明（折りたたみ式）
 with st.expander("📖 使い方"):
     st.markdown("""
-    1. **数字をタップ**: 呼ばれた数字をタップしてマークします
+    1. **アイテムをタップ**: 呼ばれたアイテムをタップしてマークします
     2. **ビンゴ**: 縦・横・斜めのいずれかが揃うとビンゴです
     3. **新しいカード**: 上部のボタンで新しいカードを生成できます
     4. **FREE**: 中央のマスは最初からマーク済みです
+    5. **カスタマイズ**: コード内のBINGO_ITEMSリストを編集して好きなアイテムに変更できます
     """)
