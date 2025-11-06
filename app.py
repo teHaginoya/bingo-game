@@ -113,6 +113,33 @@ if 'bingo_card' not in st.session_state:
     st.session_state.bingo_card = None
     st.session_state.checked = None
     st.session_state.names = None  # 各マスに入力された名前を保存
+    st.session_state.current_cell = None  # 現在編集中のセル
+
+@st.dialog("✏️ 名前を入力してください")
+def show_name_input_dialog(row, col, cell_value):
+    """名前入力用のモーダルダイアログ"""
+    st.write(f"項目: **{cell_value}**")
+    
+    name_input = st.text_input(
+        "名前",
+        key=f"name_input_{row}_{col}",
+        placeholder="名前を入力...",
+        label_visibility="collapsed"
+    )
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("✓ 決定", key=f"submit_{row}_{col}", use_container_width=True):
+            st.session_state.checked[row][col] = True
+            st.session_state.names[row][col] = name_input
+            st.session_state.current_cell = None
+            st.rerun()
+    
+    with col2:
+        if st.button("✕ キャンセル", key=f"cancel_{row}_{col}", use_container_width=True):
+            st.session_state.current_cell = None
+            st.rerun()
+
 
 def generate_bingo_card():
     """リストからランダムに選んでビンゴカードを生成"""
@@ -212,9 +239,9 @@ for row_idx in range(5):
                 disabled=is_free,
                 use_container_width=True
             ):
-                # マスがまだチェックされていない場合は名前入力を促す
+                # マスがまだチェックされていない場合は名前入力ダイアログを表示
                 if not is_checked:
-                    st.session_state[f"input_modal_{row_idx}_{col_idx}"] = True
+                    st.session_state.current_cell = (row_idx, col_idx)
                     st.rerun()
                 else:
                     # すでにチェック済みの場合はチェックを外す
@@ -222,46 +249,11 @@ for row_idx in range(5):
                     st.session_state.names[row_idx][col_idx] = ""
                     st.rerun()
 
-# 名前入力のダイアログ処理
-for row_idx in range(5):
-    for col_idx in range(5):
-        modal_key = f"input_modal_{row_idx}_{col_idx}"
-        if modal_key in st.session_state and st.session_state[modal_key]:
-            cell_value = card[row_idx][col_idx]
-            
-            # ダイアログを表示
-            with st.container():
-                st.markdown("---")
-                st.subheader(f"✏️ 名前を入力してください")
-                st.write(f"項目: **{cell_value}**")
-                
-                name_input = st.text_input(
-                    "名前",
-                    key=f"name_input_{row_idx}_{col_idx}",
-                    placeholder="名前を入力...",
-                    label_visibility="collapsed"
-                )
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    if st.button("✓ 決定", key=f"submit_{row_idx}_{col_idx}", use_container_width=True):
-                        st.session_state.checked[row_idx][col_idx] = True
-                        st.session_state.names[row_idx][col_idx] = name_input
-                        del st.session_state[modal_key]
-                        st.rerun()
-                
-                with col2:
-                    if st.button("✕ キャンセル", key=f"cancel_{row_idx}_{col_idx}", use_container_width=True):
-                        del st.session_state[modal_key]
-                        st.rerun()
-                
-                st.markdown("---")
-            
-            # 1つだけダイアログを表示
-            break
-    else:
-        continue
-    break
+# ダイアログの表示処理
+if st.session_state.current_cell is not None:
+    row, col = st.session_state.current_cell
+    cell_value = card[row][col]
+    show_name_input_dialog(row, col, cell_value)
 
 # ビンゴのチェック
 bingo_count = check_bingo(st.session_state.checked)
