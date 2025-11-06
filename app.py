@@ -25,7 +25,7 @@ st.markdown("""
     /* メインコンテナの調整 */
     .main {
         padding: 0.5rem;
-        max-width: 100%;
+        max-width: 1000px;
     }
     
     /* タイトルのスタイル */
