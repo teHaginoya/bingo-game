@@ -10,7 +10,7 @@ st.set_page_config(
     menu_items=None
 )
 
-# カスタムCSS
+# カスタムCSS - PC専用
 st.markdown("""
     <style>
     /* 背景 */
@@ -20,7 +20,7 @@ st.markdown("""
     
     /* メインコンテンツエリア */
     .main .block-container {
-        padding: 20px;
+        padding: 30px;
         max-width: 700px;
         margin: 0 auto;
     }
@@ -29,8 +29,8 @@ st.markdown("""
     h1 {
         color: white;
         text-align: center;
-        font-size: 2rem !important;
-        margin: 10px 0 !important;
+        font-size: 2.5rem !important;
+        margin: 20px 0 !important;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
@@ -39,49 +39,52 @@ st.markdown("""
     /* ============================================ */
     
     .control-area {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
     }
     
     /* コントロールエリアの列 */
     .control-area div[data-testid="column"] {
-        padding: 5px !important;
+        padding: 8px !important;
     }
     
     /* コントロールボタン */
     .control-area .stButton button {
         width: 100% !important;
-        height: 50px !important;
-        font-size: 0.95rem !important;
+        height: 60px !important;
+        font-size: 1.1rem !important;
         font-weight: bold !important;
-        border-radius: 10px !important;
+        border-radius: 12px !important;
         background: white !important;
         color: #0288D1 !important;
-        border: 2px solid #4FC3F7 !important;
+        border: 3px solid #4FC3F7 !important;
         transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
+        cursor: pointer !important;
     }
     
     .control-area .stButton button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.25) !important;
+        background: #f0f9ff !important;
     }
     
     /* ビンゴ数表示 */
     .bingo-count-display {
         text-align: center;
         color: white;
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         font-weight: bold;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-        background: rgba(255, 215, 0, 0.3);
-        padding: 12px 8px;
-        border-radius: 10px;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        height: 50px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        background: rgba(255, 215, 0, 0.4);
+        padding: 15px 10px;
+        border-radius: 12px;
+        border: 3px solid rgba(255, 255, 255, 0.6);
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 5px;
+        margin: 8px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     }
     
     /* ============================================ */
@@ -92,8 +95,12 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         gap: 0;
-        max-width: 600px;
+        max-width: 650px;
         margin: 0 auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
     
     /* ビンゴカードの行 */
@@ -105,7 +112,7 @@ st.markdown("""
     
     /* ビンゴカードの列 - 正方形を作るための設定 */
     .bingo-card-area div[data-testid="column"] {
-        padding: 3px !important;
+        padding: 5px !important;
         flex: 1 !important;
         min-width: 0 !important;
     }
@@ -116,40 +123,40 @@ st.markdown("""
     }
     
     .bingo-card-area .stButton button {
-        width: 100% !important;
-        height: 100px !important;
-        aspect-ratio: 1 / 1 !important;
-        font-size: 0.75rem !important;
+        width: 110px !important;
+        height: 110px !important;
+        font-size: 0.85rem !important;
         font-weight: bold !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         white-space: normal !important;
         word-wrap: break-word !important;
-        line-height: 1.2 !important;
+        line-height: 1.3 !important;
         transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        padding: 5px !important;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
+        padding: 8px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        cursor: pointer !important;
     }
     
     .bingo-card-area .stButton button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.25) !important;
     }
     
     /* マーク済みボタン */
     .bingo-card-area .stButton button[kind="primary"] {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
         color: #333 !important;
-        border: 2px solid #FF6B6B !important;
+        border: 3px solid #FF6B6B !important;
     }
     
     /* 未マークボタン */
     .bingo-card-area .stButton button[kind="secondary"] {
         background: white !important;
         color: #333 !important;
-        border: 2px solid #B0E0E6 !important;
+        border: 3px solid #B0E0E6 !important;
     }
     
     /* ============================================ */
@@ -158,53 +165,53 @@ st.markdown("""
     
     /* 区切り線 */
     hr {
-        margin: 15px 0;
+        margin: 25px 0;
         border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+        height: 3px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
     }
     
     /* 成功メッセージ */
     .stSuccess {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: white;
-        padding: 12px;
-        border-radius: 12px;
-        font-size: 1rem;
+        padding: 18px;
+        border-radius: 15px;
+        font-size: 1.2rem;
         font-weight: bold;
         text-align: center;
-        border: 2px solid #FF6B6B;
+        border: 3px solid #FF6B6B;
         box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        margin: 10px 0;
+        margin: 15px 0;
     }
     
     /* エラーメッセージ */
     .stError {
         background: rgba(244, 67, 54, 0.9);
         color: white;
-        padding: 15px;
-        border-radius: 10px;
-        font-size: 1rem;
+        padding: 18px;
+        border-radius: 15px;
+        font-size: 1.1rem;
     }
     
     /* メトリクス */
     [data-testid="stMetricValue"] {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         color: white;
         font-weight: bold;
     }
     
     [data-testid="stMetricLabel"] {
         color: white !important;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
     
     div[data-testid="metric-container"] {
         background: rgba(255, 255, 255, 0.25);
-        padding: 12px;
-        border-radius: 12px;
+        padding: 15px;
+        border-radius: 15px;
         backdrop-filter: blur(10px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
@@ -225,102 +232,7 @@ st.markdown("""
     
     .stTextInput input:focus {
         border-color: #0288D1;
-        box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
-    }
-    
-    /* ============================================ */
-    /* レスポンシブ対応 */
-    /* ============================================ */
-    
-    /* タブレット */
-    @media (max-width: 1024px) and (min-width: 769px) {
-        .main .block-container {
-            max-width: 550px;
-        }
-        
-        .bingo-card-area .stButton button {
-            height: 80px !important;
-            font-size: 0.65rem !important;
-        }
-    }
-    
-    /* スマホ */
-    @media (max-width: 768px) {
-        .main .block-container {
-            padding: 10px !important;
-            max-width: 400px !important;
-        }
-        
-        h1 {
-            font-size: 1.3rem !important;
-        }
-        
-        .control-area {
-            margin-bottom: 10px;
-        }
-        
-        .control-area .stButton button {
-            height: 40px !important;
-            font-size: 0.8rem !important;
-        }
-        
-        .bingo-count-display {
-            height: 40px !important;
-            font-size: 0.9rem !important;
-            padding: 8px 5px !important;
-        }
-        
-        .bingo-card-area .stButton button {
-            height: 65px !important;
-            font-size: 0.5rem !important;
-            padding: 3px !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 1.1rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.75rem !important;
-        }
-    }
-    
-    /* 小型スマホ */
-    @media (max-width: 480px) {
-        .main .block-container {
-            max-width: 350px !important;
-        }
-        
-        h1 {
-            font-size: 1.1rem !important;
-        }
-        
-        .control-area .stButton button {
-            height: 35px !important;
-            font-size: 0.7rem !important;
-        }
-        
-        .bingo-count-display {
-            height: 35px !important;
-            font-size: 0.8rem !important;
-        }
-        
-        .bingo-card-area .stButton button {
-            height: 55px !important;
-            font-size: 0.45rem !important;
-        }
-    }
-    
-    /* 極小画面 */
-    @media (max-width: 375px) {
-        .main .block-container {
-            max-width: 320px !important;
-        }
-        
-        .bingo-card-area .stButton button {
-            height: 50px !important;
-            font-size: 0.4rem !important;
-        }
+        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -438,7 +350,7 @@ st.markdown('<div class="control-area">', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.button("🆕 新規", use_container_width=True, key="btn_new"):
+    if st.button("🆕 新規カード", use_container_width=True, key="btn_new"):
         st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
@@ -455,7 +367,7 @@ with col2:
 with col3:
     if st.session_state.bingo_card:
         bingo_count = check_bingo(st.session_state.marked_cells)
-        st.markdown(f"<div class='bingo-count-display'>🏆 {bingo_count}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='bingo-count-display'>🏆 ビンゴ数: {bingo_count}</div>", unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -566,8 +478,8 @@ else:
     # 統計情報
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("📊 項目", len(ITEM_LIST))
+        st.metric("📊 総項目数", len(ITEM_LIST))
     with col2:
-        st.metric("✅ マーク", f"{len(st.session_state.marked_cells)}/25")
+        st.metric("✅ マーク済", f"{len(st.session_state.marked_cells)}/25")
     with col3:
-        st.metric("🎯 ビンゴ", bingo_count)
+        st.metric("🎯 ビンゴ数", bingo_count)
