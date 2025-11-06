@@ -41,7 +41,7 @@ st.markdown("""
         padding-bottom: 1rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-        max-width: 1000px;
+        max-width: 500px;
     }
     
     /* カラムコンテナの設定 - 5つ並ぶように */
