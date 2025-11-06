@@ -117,11 +117,11 @@ st.markdown("""
     }
     
     /* ビンゴカードのマス専用スタイル */
-    .bingo-card-area .stButton button {
+    .bingo-card-area .stButton > button {
         width: 100% !important;
         aspect-ratio: 1 / 1 !important;
         height: auto !important;
-        min-height: 0 !important;
+        min-height: 60px !important;
         max-height: 120px !important;
         font-size: 0.75rem;
         font-weight: bold;
@@ -135,6 +135,11 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    /* より強力なセレクタでaspect-ratioを適用 */
+    .bingo-card-area [data-testid="column"] .stButton > button {
+        aspect-ratio: 1 / 1 !important;
     }
     
     /* ビンゴカードのマス - ホバー効果 */
@@ -313,8 +318,10 @@ st.markdown("""
             border-radius: 3px !important;
             border-width: 1px !important;
             padding: 1px !important;
-            max-height: 55px !important;
+            min-height: 50px !important;
+            max-height: 70px !important;
             line-height: 1 !important;
+            aspect-ratio: 1 / 1 !important;
         }
         
         hr {
@@ -367,7 +374,9 @@ st.markdown("""
         .bingo-card-area .stButton button {
             font-size: 0.38rem !important;
             border-radius: 2px !important;
-            max-height: 50px !important;
+            min-height: 45px !important;
+            max-height: 60px !important;
+            aspect-ratio: 1 / 1 !important;
         }
         
         [data-testid="stMetricValue"] {
@@ -405,8 +414,10 @@ st.markdown("""
         .bingo-card-area .stButton button {
             font-size: 0.35rem !important;
             border-radius: 2px !important;
-            max-height: 45px !important;
+            min-height: 40px !important;
+            max-height: 55px !important;
             padding: 0.5px !important;
+            aspect-ratio: 1 / 1 !important;
         }
         
         [data-testid="stMetricValue"] {
