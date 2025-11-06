@@ -10,7 +10,7 @@ st.set_page_config(
     menu_items=None
 )
 
-# カスタムCSS - 画面全体を基準に
+# カスタムCSS - スマホでマスを小さく
 st.markdown("""
     <style>
     /* 水色のグラデーション背景 */
@@ -56,6 +56,7 @@ st.markdown("""
         aspect-ratio: 1 / 1 !important;
         height: auto !important;
         min-height: 0 !important;
+        max-height: 120px !important;
         font-size: 0.75rem;
         font-weight: bold;
         border-radius: 8px;
@@ -108,6 +109,7 @@ st.markdown("""
         aspect-ratio: auto !important;
         height: 50px !important;
         min-height: 50px !important;
+        max-height: 50px !important;
         font-size: 0.9rem;
         border-radius: 10px;
         background: white;
@@ -212,6 +214,7 @@ st.markdown("""
         
         .stButton button {
             font-size: 0.7rem;
+            max-height: 100px !important;
         }
         
         h1 {
@@ -219,9 +222,8 @@ st.markdown("""
         }
     }
     
-    /* スマホ用の調整 - 画面サイズを基準に */
+    /* スマホ用の調整 - マスを小さく */
     @media (max-width: 768px) {
-        /* 画面全体を基準に */
         html, body, .stApp {
             width: 100vw !important;
             overflow-x: hidden !important;
@@ -233,13 +235,11 @@ st.markdown("""
             width: 100% !important;
         }
         
-        /* タイトルを小さく */
         h1 {
             font-size: 1.3rem !important;
             margin: 0.3rem 0 !important;
         }
         
-        /* コントロールエリア */
         .control-area {
             margin-bottom: 0.5rem;
         }
@@ -254,6 +254,7 @@ st.markdown("""
         .control-area .stButton button {
             height: 36px !important;
             min-height: 36px !important;
+            max-height: 36px !important;
             font-size: 0.8rem !important;
             border-radius: 8px !important;
         }
@@ -265,19 +266,17 @@ st.markdown("""
             border-radius: 8px !important;
         }
         
-        /* 区切り線を小さく */
         hr {
             margin: 0.4rem 0 !important;
         }
         
-        /* 成功メッセージを小さく */
         .stSuccess {
             padding: 8px !important;
             font-size: 0.85rem !important;
-            margin: 0.5rem 0 !important;
+            margin: 0.4rem 0 !important;
         }
         
-        /* ビンゴカードエリアの列 */
+        /* ビンゴカードエリア - マスを小さく！ */
         div[data-testid="column"] {
             width: 20% !important;
             flex: 0 0 20% !important;
@@ -285,15 +284,16 @@ st.markdown("""
             padding: 1.5px !important;
         }
         
-        /* ビンゴカードのボタン */
+        /* ビンゴカードのボタン - サイズを制限 */
         .stButton button {
-            font-size: 0.6rem !important;
-            border-radius: 5px !important;
-            border-width: 1.5px !important;
+            font-size: 0.55rem !important;
+            border-radius: 4px !important;
+            border-width: 1px !important;
             padding: 2px !important;
+            max-height: 70px !important;
+            line-height: 1.1 !important;
         }
         
-        /* メトリクス */
         [data-testid="stMetricValue"] {
             font-size: 1.1rem !important;
         }
@@ -307,7 +307,7 @@ st.markdown("""
         }
     }
     
-    /* 小型スマホ */
+    /* 小型スマホ - マスをさらに小さく */
     @media (max-width: 480px) {
         .main .block-container {
             padding: 0.4rem !important;
@@ -321,6 +321,7 @@ st.markdown("""
         .control-area .stButton button {
             height: 32px !important;
             min-height: 32px !important;
+            max-height: 32px !important;
             font-size: 0.75rem !important;
         }
         
@@ -329,9 +330,11 @@ st.markdown("""
             height: 32px !important;
         }
         
+        /* マスをさらに小さく */
         .stButton button {
-            font-size: 0.55rem !important;
-            border-radius: 4px !important;
+            font-size: 0.5rem !important;
+            border-radius: 3px !important;
+            max-height: 60px !important;
         }
         
         [data-testid="stMetricValue"] {
@@ -343,7 +346,7 @@ st.markdown("""
         }
     }
     
-    /* 非常に小さい画面 */
+    /* 非常に小さい画面 - マスを最小に */
     @media (max-width: 375px) {
         .main .block-container {
             padding: 0.3rem !important;
@@ -356,6 +359,7 @@ st.markdown("""
         .control-area .stButton button {
             height: 28px !important;
             min-height: 28px !important;
+            max-height: 28px !important;
             font-size: 0.7rem !important;
         }
         
@@ -364,13 +368,20 @@ st.markdown("""
             height: 28px !important;
         }
         
+        /* マスを最小サイズに */
         .stButton button {
-            font-size: 0.5rem !important;
-            border-radius: 3px !important;
+            font-size: 0.45rem !important;
+            border-radius: 2px !important;
+            max-height: 50px !important;
+            padding: 1px !important;
         }
         
         [data-testid="stMetricValue"] {
             font-size: 0.9rem !important;
+        }
+        
+        div[data-testid="column"] {
+            padding: 1px !important;
         }
     }
     </style>
