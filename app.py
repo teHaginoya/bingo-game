@@ -10,75 +10,60 @@ st.set_page_config(
     menu_items=None
 )
 
-# カスタムCSS - コントロールボタンとマスを別々に管理
+# カスタムCSS
 st.markdown("""
     <style>
-    /* 水色のグラデーション背景 */
+    /* 背景 */
     .stApp {
         background: linear-gradient(135deg, #89CFF0 0%, #4FC3F7 50%, #0288D1 100%);
     }
     
-    /* PC用のメインコンテンツエリア */
+    /* メインコンテンツエリア */
     .main .block-container {
-        padding: 1rem;
-        max-width: 600px;
+        padding: 20px;
+        max-width: 700px;
         margin: 0 auto;
     }
     
-    /* タイトルスタイル */
+    /* タイトル */
     h1 {
         color: white;
         text-align: center;
         font-size: 2rem !important;
-        margin: 0.5rem 0 !important;
+        margin: 10px 0 !important;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
-    /* 行を横並びに固定 */
-    div[data-testid="stHorizontalBlock"] {
-        gap: 0px !important;
-        flex-wrap: nowrap !important;
-        display: flex !important;
-    }
-    
     /* ============================================ */
-    /* コントロールエリア専用設定 */
+    /* コントロールエリア */
     /* ============================================ */
     
-    /* コントロールエリア全体 */
     .control-area {
-        margin-bottom: 1rem;
+        margin-bottom: 20px;
     }
     
-    /* コントロールボタンエリアの列 */
+    /* コントロールエリアの列 */
     .control-area div[data-testid="column"] {
-        width: 33.333% !important;
-        flex: 0 0 33.333% !important;
-        max-width: 33.333% !important;
+        padding: 5px !important;
     }
     
-    /* コントロールボタン専用スタイル */
+    /* コントロールボタン */
     .control-area .stButton button {
-        aspect-ratio: auto !important;
         width: 100% !important;
         height: 50px !important;
-        min-height: 50px !important;
-        max-height: 50px !important;
-        font-size: 0.9rem;
-        font-weight: bold;
-        border-radius: 10px;
-        background: white;
-        color: #0288D1;
-        border: 2px solid #4FC3F7;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        white-space: nowrap;
-        padding: 8px;
+        font-size: 0.95rem !important;
+        font-weight: bold !important;
+        border-radius: 10px !important;
+        background: white !important;
+        color: #0288D1 !important;
+        border: 2px solid #4FC3F7 !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
     }
     
     .control-area .stButton button:hover {
         transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
     }
     
     /* ビンゴ数表示 */
@@ -96,78 +81,113 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: 5px;
     }
     
     /* ============================================ */
-    /* ビンゴカードエリア専用設定 */
-    /* ============================================ */
-    
     /* ビンゴカードエリア */
+    /* ============================================ */
+    
     .bingo-card-area {
-        margin-top: 1rem;
-    }
-    
-    /* ビンゴカードエリアの列設定 - 5x5グリッド */
-    .bingo-card-area div[data-testid="column"] {
-        width: 20% !important;
-        flex: 0 0 20% !important;
-        min-width: 0 !important;
-        max-width: 20% !important;
-        padding: 2px !important;
-    }
-    
-    /* ビンゴカードのマス専用スタイル */
-    .bingo-card-area .stButton > button {
-        width: 100% !important;
-        aspect-ratio: 1 / 1 !important;
-        height: auto !important;
-        min-height: 60px !important;
-        max-height: 120px !important;
-        font-size: 0.75rem;
-        font-weight: bold;
-        border-radius: 8px;
-        white-space: normal;
-        word-wrap: break-word;
-        line-height: 1.2;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        padding: 4px;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
+        gap: 0;
+        max-width: 600px;
+        margin: 0 auto;
     }
     
-    /* より強力なセレクタでaspect-ratioを適用 */
-    .bingo-card-area [data-testid="column"] .stButton > button {
+    /* ビンゴカードの行 */
+    .bingo-card-area div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        gap: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* ビンゴカードの列 - 正方形を作るための設定 */
+    .bingo-card-area div[data-testid="column"] {
+        padding: 3px !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+    
+    /* ビンゴカードのボタン - 正方形 */
+    .bingo-card-area .stButton {
+        width: 100%;
+    }
+    
+    .bingo-card-area .stButton button {
+        width: 100% !important;
+        height: 100px !important;
         aspect-ratio: 1 / 1 !important;
+        font-size: 0.75rem !important;
+        font-weight: bold !important;
+        border-radius: 8px !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        line-height: 1.2 !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        padding: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
-    /* ビンゴカードのマス - ホバー効果 */
     .bingo-card-area .stButton button:hover {
         transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
     }
     
-    /* ビンゴカードのマス - プライマリボタン（マーク済み） */
+    /* マーク済みボタン */
     .bingo-card-area .stButton button[kind="primary"] {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: #333;
-        border: 2px solid #FF6B6B;
-        font-weight: bold;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+        color: #333 !important;
+        border: 2px solid #FF6B6B !important;
     }
     
-    /* ビンゴカードのマス - セカンダリボタン（未マーク） */
+    /* 未マークボタン */
     .bingo-card-area .stButton button[kind="secondary"] {
-        background: white;
-        color: #333;
-        border: 2px solid #B0E0E6;
+        background: white !important;
+        color: #333 !important;
+        border: 2px solid #B0E0E6 !important;
     }
     
     /* ============================================ */
-    /* 共通要素 */
+    /* その他の要素 */
     /* ============================================ */
     
-    /* メトリクスカード */
+    /* 区切り線 */
+    hr {
+        margin: 15px 0;
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    }
+    
+    /* 成功メッセージ */
+    .stSuccess {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: white;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        border: 2px solid #FF6B6B;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        margin: 10px 0;
+    }
+    
+    /* エラーメッセージ */
+    .stError {
+        background: rgba(244, 67, 54, 0.9);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+    
+    /* メトリクス */
     [data-testid="stMetricValue"] {
         font-size: 1.5rem;
         color: white;
@@ -188,29 +208,7 @@ st.markdown("""
         border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
-    /* 区切り線 */
-    hr {
-        margin: 0.8rem 0;
-        border: none;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-    }
-    
-    /* 成功メッセージ */
-    .stSuccess {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: white;
-        padding: 12px;
-        border-radius: 12px;
-        font-size: 1rem;
-        font-weight: bold;
-        text-align: center;
-        border: 2px solid #FF6B6B;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        margin: 0.8rem 0;
-    }
-    
-    /* ダイアログのスタイル */
+    /* ダイアログ */
     [data-testid="stModal"] {
         background: rgba(255, 255, 255, 0.98);
         border-radius: 20px;
@@ -230,208 +228,104 @@ st.markdown("""
         box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
     }
     
-    /* エラーメッセージ */
-    .stError {
-        background: rgba(244, 67, 54, 0.9);
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-        font-size: 1rem;
-    }
-    
     /* ============================================ */
     /* レスポンシブ対応 */
     /* ============================================ */
     
-    /* タブレット用の調整 */
+    /* タブレット */
     @media (max-width: 1024px) and (min-width: 769px) {
         .main .block-container {
-            max-width: 400px;
+            max-width: 550px;
         }
         
         .bingo-card-area .stButton button {
-            font-size: 0.6rem;
-            max-height: 80px !important;
-        }
-        
-        h1 {
-            font-size: 1.5rem !important;
+            height: 80px !important;
+            font-size: 0.65rem !important;
         }
     }
     
-    /* スマホ用の調整 */
+    /* スマホ */
     @media (max-width: 768px) {
-        html, body, .stApp {
-            width: 100vw !important;
-            overflow-x: hidden !important;
-        }
-        
         .main .block-container {
-            padding: 0.5rem !important;
-            max-width: 350px !important;
-            width: 100% !important;
-            margin: 0 auto !important;
+            padding: 10px !important;
+            max-width: 400px !important;
         }
         
         h1 {
-            font-size: 1.2rem !important;
-            margin: 0.2rem 0 !important;
+            font-size: 1.3rem !important;
         }
         
-        /* コントロールエリア - スマホ */
         .control-area {
-            margin-bottom: 0.4rem;
-        }
-        
-        .control-area div[data-testid="column"] {
-            width: 33.333% !important;
-            flex: 0 0 33.333% !important;
-            max-width: 33.333% !important;
-            padding: 2px !important;
+            margin-bottom: 10px;
         }
         
         .control-area .stButton button {
-            height: 32px !important;
-            min-height: 32px !important;
-            max-height: 32px !important;
-            font-size: 0.75rem !important;
-            border-radius: 6px !important;
+            height: 40px !important;
+            font-size: 0.8rem !important;
         }
         
         .bingo-count-display {
-            font-size: 0.8rem !important;
-            padding: 6px 4px !important;
-            height: 32px !important;
-            border-radius: 6px !important;
-        }
-        
-        /* ビンゴカードエリア - スマホ */
-        .bingo-card-area div[data-testid="column"] {
-            width: 20% !important;
-            flex: 0 0 20% !important;
-            max-width: 20% !important;
-            padding: 1px !important;
+            height: 40px !important;
+            font-size: 0.9rem !important;
+            padding: 8px 5px !important;
         }
         
         .bingo-card-area .stButton button {
-            font-size: 0.4rem !important;
-            border-radius: 3px !important;
-            border-width: 1px !important;
-            padding: 1px !important;
-            min-height: 50px !important;
-            max-height: 70px !important;
-            line-height: 1 !important;
-            aspect-ratio: 1 / 1 !important;
-        }
-        
-        hr {
-            margin: 0.3rem 0 !important;
-        }
-        
-        .stSuccess {
-            padding: 6px !important;
-            font-size: 0.75rem !important;
-            margin: 0.3rem 0 !important;
+            height: 65px !important;
+            font-size: 0.5rem !important;
+            padding: 3px !important;
         }
         
         [data-testid="stMetricValue"] {
-            font-size: 0.95rem !important;
+            font-size: 1.1rem !important;
         }
         
         [data-testid="stMetricLabel"] {
-            font-size: 0.65rem !important;
-        }
-        
-        div[data-testid="metric-container"] {
-            padding: 6px !important;
+            font-size: 0.75rem !important;
         }
     }
     
     /* 小型スマホ */
     @media (max-width: 480px) {
         .main .block-container {
-            padding: 0.4rem !important;
-            max-width: 320px !important;
+            max-width: 350px !important;
         }
         
         h1 {
-            font-size: 1rem !important;
-            margin: 0.15rem 0 !important;
+            font-size: 1.1rem !important;
         }
         
         .control-area .stButton button {
-            height: 28px !important;
-            min-height: 28px !important;
-            max-height: 28px !important;
+            height: 35px !important;
             font-size: 0.7rem !important;
         }
         
         .bingo-count-display {
-            font-size: 0.75rem !important;
-            height: 28px !important;
-        }
-        
-        .bingo-card-area .stButton button {
-            font-size: 0.38rem !important;
-            border-radius: 2px !important;
-            min-height: 45px !important;
-            max-height: 60px !important;
-            aspect-ratio: 1 / 1 !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.85rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.6rem !important;
-        }
-    }
-    
-    /* 非常に小さい画面 */
-    @media (max-width: 375px) {
-        .main .block-container {
-            padding: 0.3rem !important;
-            max-width: 280px !important;
-        }
-        
-        h1 {
-            font-size: 0.9rem !important;
-        }
-        
-        .control-area .stButton button {
-            height: 26px !important;
-            min-height: 26px !important;
-            max-height: 26px !important;
-            font-size: 0.65rem !important;
-        }
-        
-        .bingo-count-display {
-            font-size: 0.7rem !important;
-            height: 26px !important;
-        }
-        
-        .bingo-card-area .stButton button {
-            font-size: 0.35rem !important;
-            border-radius: 2px !important;
-            min-height: 40px !important;
-            max-height: 55px !important;
-            padding: 0.5px !important;
-            aspect-ratio: 1 / 1 !important;
-        }
-        
-        [data-testid="stMetricValue"] {
+            height: 35px !important;
             font-size: 0.8rem !important;
         }
         
-        .bingo-card-area div[data-testid="column"] {
-            padding: 0.5px !important;
+        .bingo-card-area .stButton button {
+            height: 55px !important;
+            font-size: 0.45rem !important;
+        }
+    }
+    
+    /* 極小画面 */
+    @media (max-width: 375px) {
+        .main .block-container {
+            max-width: 320px !important;
+        }
+        
+        .bingo-card-area .stButton button {
+            height: 50px !important;
+            font-size: 0.4rem !important;
         }
     }
     </style>
     """, unsafe_allow_html=True)
 
-# ===== ここに項目リストを追加してください =====
+# ===== 項目リスト =====
 ITEM_LIST = [
     "朝食を食べた",
     "運動した",
@@ -459,7 +353,6 @@ ITEM_LIST = [
     "会議に参加した",
     "プレゼンした",
 ]
-# ==========================================
 
 # セッションステートの初期化
 if 'bingo_card' not in st.session_state:
@@ -468,13 +361,11 @@ if 'marked_cells' not in st.session_state:
     st.session_state.marked_cells = {}
 if 'selected_cell' not in st.session_state:
     st.session_state.selected_cell = None
-if 'flip_cell' not in st.session_state:
-    st.session_state.flip_cell = None
 if 'last_bingo_count' not in st.session_state:
     st.session_state.last_bingo_count = 0
 
 def generate_bingo_card(items):
-    """カスタム項目でビンゴカードを生成"""
+    """ビンゴカードを生成"""
     if len(items) < 24:
         return None
     
@@ -500,24 +391,28 @@ def check_bingo(marked):
     """ビンゴ判定"""
     bingo_count = 0
     
+    # 横列チェック
     for row in range(5):
         if all((row, col) in marked for col in range(5)):
             bingo_count += 1
     
+    # 縦列チェック
     for col in range(5):
         if all((row, col) in marked for row in range(5)):
             bingo_count += 1
     
+    # 斜め（左上→右下）
     if all((i, i) in marked for i in range(5)):
         bingo_count += 1
     
+    # 斜め（右上→左下）
     if all((i, 4-i) in marked for i in range(5)):
         bingo_count += 1
     
     return bingo_count
 
 def show_snow_effect(bingo_count):
-    """ビンゴ数に応じた雪のエフェクトを表示"""
+    """ビンゴ数に応じた雪のエフェクト"""
     if bingo_count == 1:
         st.snow()
     elif bingo_count == 2:
@@ -541,20 +436,19 @@ st.title("🎯 ビンゴカード")
 # コントロールエリア
 st.markdown('<div class="control-area">', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
+
 with col1:
-    if st.button("🆕 新規", use_container_width=True):
+    if st.button("🆕 新規", use_container_width=True, key="btn_new"):
         st.session_state.bingo_card = generate_bingo_card(ITEM_LIST)
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
-        st.session_state.flip_cell = None
         st.session_state.last_bingo_count = 0
         st.rerun()
 
 with col2:
-    if st.button("🔄 リセット", use_container_width=True):
+    if st.button("🔄 リセット", use_container_width=True, key="btn_reset"):
         st.session_state.marked_cells = {(2, 2): "FREE"}
         st.session_state.selected_cell = None
-        st.session_state.flip_cell = None
         st.session_state.last_bingo_count = 0
         st.rerun()
 
@@ -562,11 +456,12 @@ with col3:
     if st.session_state.bingo_card:
         bingo_count = check_bingo(st.session_state.marked_cells)
         st.markdown(f"<div class='bingo-count-display'>🏆 {bingo_count}</div>", unsafe_allow_html=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 st.divider()
 
-# ダイアログ表示
+# ダイアログ
 @st.dialog("✨ 名前を入力")
 def name_input_dialog(row, col):
     item_name = st.session_state.bingo_card[row][col]
@@ -585,7 +480,6 @@ def name_input_dialog(row, col):
             if name.strip():
                 st.session_state.marked_cells[(row, col)] = name.strip()
                 st.session_state.selected_cell = None
-                st.session_state.flip_cell = (row, col)
                 st.rerun()
             else:
                 st.warning("名前を入力してください")
@@ -595,7 +489,6 @@ def name_input_dialog(row, col):
             if (row, col) in st.session_state.marked_cells:
                 del st.session_state.marked_cells[(row, col)]
             st.session_state.selected_cell = None
-            st.session_state.flip_cell = (row, col)
             st.rerun()
     
     with col3:
@@ -614,7 +507,7 @@ else:
     # ビンゴ判定
     bingo_count = check_bingo(st.session_state.marked_cells)
     
-    # ビンゴ数が増えた場合のみ雪エフェクト表示
+    # ビンゴ数が増えた場合のみ雪エフェクト
     if bingo_count > st.session_state.last_bingo_count:
         show_snow_effect(bingo_count)
         st.session_state.last_bingo_count = bingo_count
@@ -629,6 +522,7 @@ else:
     
     # ビンゴカード表示（5x5グリッド）
     st.markdown('<div class="bingo-card-area">', unsafe_allow_html=True)
+    
     for row in range(5):
         cols = st.columns(5)
         for col in range(5):
@@ -664,6 +558,7 @@ else:
                     ):
                         st.session_state.selected_cell = (row, col)
                         st.rerun()
+    
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.divider()
