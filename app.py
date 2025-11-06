@@ -292,7 +292,7 @@ st.markdown("""
             border-radius: 3px !important;
             border-width: 1px !important;
             padding: 1px !important;
-            max-height: 10px !important;
+            max-height: 55px !important;
             line-height: 1 !important;
         }
         
@@ -337,7 +337,7 @@ st.markdown("""
         .stButton button {
             font-size: 0.38rem !important;
             border-radius: 2px !important;
-            max-height: 10px !important;
+            max-height: 50px !important;
         }
         
         [data-testid="stMetricValue"] {
@@ -376,7 +376,7 @@ st.markdown("""
         .stButton button {
             font-size: 0.35rem !important;
             border-radius: 2px !important;
-            max-height: 7px !important;
+            max-height: 45px !important;
             padding: 0.5px !important;
         }
         
