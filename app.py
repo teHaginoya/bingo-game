@@ -1,6 +1,6 @@
 import streamlit as st
 import random
-import streamlit.components.v1 as components
+import time
 
 st.set_page_config(
     page_title="ビンゴゲーム", 
@@ -273,83 +273,22 @@ def check_bingo(marked):
     
     return bingo_count
 
-def show_fireworks(bingo_count):
-    """ビンゴ数に応じた花火エフェクトを表示"""
-    
+def show_snow_effect(bingo_count):
+    """ビンゴ数に応じた雪のエフェクトを表示"""
     if bingo_count == 1:
-        # 1ライン: 小規模な花火
-        fireworks_html = """
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-        <script>
-        // 小規模な花火
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-        </script>
-        """
+        # 1ライン: 雪 1回
+        st.snow()
     elif bingo_count == 2:
-        # 2ライン: 中規模な花火（両側から）
-        fireworks_html = """
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-        <script>
-        // 左側から
-        confetti({
-            particleCount: 150,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0, y: 0.7 }
-        });
-        
-        // 右側から
-        setTimeout(function() {
-            confetti({
-                particleCount: 150,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1, y: 0.7 }
-            });
-        }, 200);
-        </script>
-        """
-    else:
-        # 3ライン以上: 大規模な連続花火
-        fireworks_html = """
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-        <script>
-        const duration = 3000;
-        const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-        function randomInRange(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        const interval = setInterval(function() {
-            const timeLeft = animationEnd - Date.now();
-
-            if (timeLeft <= 0) {
-                return clearInterval(interval);
-            }
-
-            const particleCount = 50 * (timeLeft / duration);
-            
-            // ランダムな位置から発射
-            confetti(Object.assign({}, defaults, {
-                particleCount,
-                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-            }));
-            
-            confetti(Object.assign({}, defaults, {
-                particleCount,
-                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-            }));
-        }, 250);
-        </script>
-        """
-    
-    components.html(fireworks_html, height=0)
+        # 2ライン: 雪 2回
+        st.snow()
+        time.sleep(0.3)
+        st.snow()
+    elif bingo_count >= 3:
+        # 3ライン以上: ビンゴ数に応じて繰り返し（最大5回）
+        for i in range(min(bingo_count, 5)):
+            st.snow()
+            if i < min(bingo_count, 5) - 1:
+                time.sleep(0.3)
 
 # 初回アクセス時に自動でカード生成
 if st.session_state.bingo_card is None and len(ITEM_LIST) >= 24:
@@ -434,18 +373,18 @@ else:
     # ビンゴ判定
     bingo_count = check_bingo(st.session_state.marked_cells)
     
-    # ビンゴ数が増えた場合のみ花火エフェクト表示
+    # ビンゴ数が増えた場合のみ雪エフェクト表示
     if bingo_count > st.session_state.last_bingo_count:
-        show_fireworks(bingo_count)
+        show_snow_effect(bingo_count)
         st.session_state.last_bingo_count = bingo_count
     
     # ビンゴメッセージ
     if bingo_count == 1:
-        st.success(f"🎆 素晴らしい！{bingo_count}ライン達成！")
+        st.success(f"❄️ 素晴らしい！{bingo_count}ライン達成！")
     elif bingo_count == 2:
-        st.success(f"🎇🎆 すごい！{bingo_count}ライン達成！ 🎆🎇")
+        st.success(f"❄️❄️ すごい！{bingo_count}ライン達成！ ❄️❄️")
     elif bingo_count >= 3:
-        st.success(f"🎆🎇🎉 完璧です！{bingo_count}ライン達成！ 🎉🎇🎆")
+        st.success(f"❄️❄️❄️ 完璧です！{bingo_count}ライン達成！ ❄️❄️❄️")
     
     # ビンゴカード表示
     for row in range(5):
