@@ -39,53 +39,13 @@ st.markdown("""
     .block-container {
         padding-top: 1rem;
         padding-bottom: 1rem;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
         max-width: 100%;
     }
     
-    /* カラムコンテナの設定 - 5つ並ぶように */
-    [data-testid="column"] {
-        width: 20% !important;
-        flex: 0 0 20% !important;
-        max-width: 20% !important;
-        min-width: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* 行の設定 */
-    .row-widget.stHorizontal {
-        gap: 0 !important;
+    /* Streamlitのボタンを正方形にするスタイル */
+    .stButton > button {
         width: 100% !important;
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        margin: 0 !important;
-    }
-    
-    /* ボタンのコンテナ */
-    .element-container:has(.stButton) {
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* ========================================
-       ビンゴマス用のスタイル（正方形）
-       key="cell_*_*" のボタン
-       ======================================== */
-    .stButton:has(button[data-testid*="baseButton"]) {
-        width: 100% !important;
-        padding: 2px !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* cell_で始まるkeyを持つボタン = ビンゴマス（正方形） */
-    button[aria-label*="cell_"] {
-        width: 100% !important;
-        aspect-ratio: 1 / 1 !important;  /* 正方形 */
+        aspect-ratio: 1 !important;
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
         min-height: 0 !important;
@@ -93,7 +53,7 @@ st.markdown("""
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: clamp(0.7rem, 2.5vw, 1rem) !important;
+        font-size: clamp(0.7rem, 3vw, 1rem) !important;
         font-weight: normal !important;
         border-radius: 8px !important;
         border: 2px solid #333 !important;
@@ -101,30 +61,6 @@ st.markdown("""
         word-wrap: break-word !important;
         line-height: 1.4 !important;
         box-sizing: border-box !important;
-        margin: 0 !important;
-    }
-    
-    /* ========================================
-       通常のボタン用のスタイル（横長の長方形）
-       submit, cancel などのボタン
-       ======================================== */
-    button[aria-label*="submit"],
-    button[aria-label*="cancel"] {
-        width: 100% !important;
-        aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
-        padding: 0.75rem 1.5rem !important;
-        height: auto !important;
-        min-height: 0 !important;
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 1rem !important;
-        font-weight: normal !important;
-        border-radius: 8px !important;
-        border: 2px solid #333 !important;
-        box-sizing: border-box !important;
-        margin: 0 !important;
     }
     
     /* ボタン内のテキストスタイル */
@@ -160,24 +96,29 @@ st.markdown("""
         opacity: 1 !important;
     }
     
+    /* カラムの間隔調整 */
+    div[data-testid="column"] {
+        padding: 0.15rem !important;
+    }
+    
+    /* 行の間隔調整 */
+    .row-widget.stHorizontal {
+        gap: 0 !important;
+    }
+    
     /* Streamlitのデフォルト余白を削除 */
     .element-container {
-        margin-bottom: 0 !important;
+        margin-bottom: 0.3rem !important;
     }
     
     .row-widget {
         margin-bottom: 0 !important;
     }
     
-    /* スマホ画面での調整 (768px以下) */
+    /* スマホ画面での調整 */
     @media (max-width: 768px) {
         .main {
             padding: 0.3rem;
-        }
-        
-        .block-container {
-            padding-left: 0.3rem;
-            padding-right: 0.3rem;
         }
         
         h1 {
@@ -185,70 +126,39 @@ st.markdown("""
             margin-bottom: 0.5rem;
         }
         
-        .stButton:has(button[aria-label*="cell_"]) {
-            padding: 1.5px !important;
-        }
-        
-        button[aria-label*="cell_"] {
-            font-size: clamp(0.6rem, 2.8vw, 0.85rem) !important;
+        .stButton > button {
+            font-size: clamp(0.65rem, 3.5vw, 0.9rem) !important;
             padding: 0.3rem 0.1rem !important;
             border-width: 1.5px !important;
-            border-radius: 6px !important;
+        }
+        
+        div[data-testid="column"] {
+            padding: 0.1rem !important;
         }
     }
     
-    /* 非常に小さい画面（480px以下） */
+    /* 非常に小さい画面（モバイル）での調整 */
     @media (max-width: 480px) {
         .main {
             padding: 0.2rem;
         }
         
-        .block-container {
-            padding-left: 0.2rem;
-            padding-right: 0.2rem;
-            padding-top: 0.5rem;
-        }
-        
         h1 {
             font-size: 1.3rem;
-            margin-bottom: 0.3rem;
         }
         
-        .stButton:has(button[aria-label*="cell_"]) {
-            padding: 1px !important;
-        }
-        
-        button[aria-label*="cell_"] {
-            font-size: clamp(0.55rem, 3vw, 0.75rem) !important;
-            padding: 0.2rem 0.05rem !important;
+        .stButton > button {
+            font-size: clamp(0.6rem, 3.8vw, 0.85rem) !important;
+            padding: 0.25rem 0.1rem !important;
             line-height: 1.3 !important;
-            border-radius: 4px !important;
-            border-width: 1px !important;
-        }
-    }
-    
-    /* 超小型画面（360px以下） */
-    @media (max-width: 360px) {
-        .main {
-            padding: 0.1rem;
         }
         
-        .block-container {
-            padding: 0.1rem;
+        div[data-testid="column"] {
+            padding: 0.08rem !important;
         }
         
-        h1 {
-            font-size: 1.2rem;
-        }
-        
-        .stButton:has(button[aria-label*="cell_"]) {
-            padding: 0.5px !important;
-        }
-        
-        button[aria-label*="cell_"] {
-            font-size: clamp(0.5rem, 3.2vw, 0.7rem) !important;
-            padding: 0.15rem 0.05rem !important;
-            border-radius: 3px !important;
+        .element-container {
+            margin-bottom: 0.2rem !important;
         }
     }
 </style>
