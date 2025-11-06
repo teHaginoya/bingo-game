@@ -44,7 +44,7 @@ st.markdown("""
         max-width: 100%;
     }
     
-    /* カラムコンテナの設定 - ボタンが20%の時に綺麗に並ぶように */
+    /* カラムコンテナの設定 - 5つ並ぶように */
     [data-testid="column"] {
         width: 20% !important;
         flex: 0 0 20% !important;
@@ -58,7 +58,7 @@ st.markdown("""
     /* 行の設定 */
     .row-widget.stHorizontal {
         gap: 0 !important;
-        # width: 100% !important;
+        width: 100% !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         margin: 0 !important;
@@ -72,17 +72,20 @@ st.markdown("""
         box-sizing: border-box !important;
     }
     
-    /* Streamlitのボタンコンテナ */
-    .stButton {
+    /* ========================================
+       ビンゴマス用のスタイル（正方形）
+       key="cell_*_*" のボタン
+       ======================================== */
+    .stButton:has(button[data-testid*="baseButton"]) {
         width: 100% !important;
         padding: 2px !important;
         box-sizing: border-box !important;
     }
     
-    /* ボタン自体を20%に設定 */
-    .stButton > button {
-        width: 20% !important;
-        aspect-ratio: 1 / 1 !important;
+    /* cell_で始まるkeyを持つボタン = ビンゴマス（正方形） */
+    button[aria-label*="cell_"] {
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;  /* 正方形 */
         padding: 0.5rem 0.2rem !important;
         height: auto !important;
         min-height: 0 !important;
@@ -97,6 +100,29 @@ st.markdown("""
         white-space: pre-line !important;
         word-wrap: break-word !important;
         line-height: 1.4 !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+    }
+    
+    /* ========================================
+       通常のボタン用のスタイル（横長の長方形）
+       submit, cancel などのボタン
+       ======================================== */
+    button[aria-label*="submit"],
+    button[aria-label*="cancel"] {
+        width: 100% !important;
+        aspect-ratio: 4 / 1 !important;  /* 横長の長方形 */
+        padding: 0.75rem 1.5rem !important;
+        height: auto !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1rem !important;
+        font-weight: normal !important;
+        border-radius: 8px !important;
+        border: 2px solid #333 !important;
         box-sizing: border-box !important;
         margin: 0 !important;
     }
@@ -159,11 +185,11 @@ st.markdown("""
             margin-bottom: 0.5rem;
         }
         
-        .stButton {
+        .stButton:has(button[aria-label*="cell_"]) {
             padding: 1.5px !important;
         }
         
-        .stButton > button {
+        button[aria-label*="cell_"] {
             font-size: clamp(0.6rem, 2.8vw, 0.85rem) !important;
             padding: 0.3rem 0.1rem !important;
             border-width: 1.5px !important;
@@ -188,11 +214,11 @@ st.markdown("""
             margin-bottom: 0.3rem;
         }
         
-        .stButton {
+        .stButton:has(button[aria-label*="cell_"]) {
             padding: 1px !important;
         }
         
-        .stButton > button {
+        button[aria-label*="cell_"] {
             font-size: clamp(0.55rem, 3vw, 0.75rem) !important;
             padding: 0.2rem 0.05rem !important;
             line-height: 1.3 !important;
@@ -215,11 +241,11 @@ st.markdown("""
             font-size: 1.2rem;
         }
         
-        .stButton {
+        .stButton:has(button[aria-label*="cell_"]) {
             padding: 0.5px !important;
         }
         
-        .stButton > button {
+        button[aria-label*="cell_"] {
             font-size: clamp(0.5rem, 3.2vw, 0.7rem) !important;
             padding: 0.15rem 0.05rem !important;
             border-radius: 3px !important;
